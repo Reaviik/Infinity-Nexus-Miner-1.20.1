@@ -1,0 +1,14 @@
+{
+  "type": "infinity_nexus_miner:mining",
+  "energy": 100,
+  "level": 7,
+  "fortune": true,
+  "ingredient": [
+    {
+      "tag": "forge:ores/infinity"
+    }
+  ],
+  "output": {
+    "item": "infinity_nexus_mod:raw_infinity"
+  }
+}

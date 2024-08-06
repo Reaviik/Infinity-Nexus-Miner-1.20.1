@@ -1,0 +1,14 @@
+{
+  "type": "infinity_nexus_miner:mining",
+  "energy": 100,
+  "level": 5,
+  "fortune": true,
+  "ingredient": [
+    {
+      "tag": "forge:ores/iesnium"
+    }
+  ],
+  "output": {
+    "item": "occultism:raw_iesnium"
+  }
+}
