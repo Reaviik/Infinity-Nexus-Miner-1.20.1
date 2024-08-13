@@ -1,8 +1,8 @@
 package com.Infinity.Nexus.Miner.screen.miner;
 
 
-import com.Infinity.Nexus.Core.slots.*;
 import com.Infinity.Nexus.Core.slots.ResultSlot;
+import com.Infinity.Nexus.Core.slots.*;
 import com.Infinity.Nexus.Miner.block.ModBlocksMiner;
 import com.Infinity.Nexus.Miner.block.entity.MinerBlockEntity;
 import com.Infinity.Nexus.Miner.screen.ModMenuTypes;

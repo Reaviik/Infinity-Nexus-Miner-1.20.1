@@ -9,7 +9,6 @@ import com.Infinity.Nexus.Core.utils.ModUtils;
 import com.Infinity.Nexus.Miner.block.custom.Miner;
 import com.Infinity.Nexus.Miner.config.Config;
 import com.Infinity.Nexus.Miner.config.ConfigUtils;
-import com.Infinity.Nexus.Miner.item.ModItemsMiner;
 import com.Infinity.Nexus.Miner.recipes.MinerRecipes;
 import com.Infinity.Nexus.Miner.screen.miner.MinerMenu;
 import com.Infinity.Nexus.Miner.utils.MinerTierStructure;
@@ -399,6 +398,7 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
             craftItem(pPos, machineLevel);
             extractEnergy(this, machineLevel);
             verifySolidFuel();
+            ModUtils.ejectItemsWhePusher(pPos.above(),UPGRADE_SLOTS, UPGRADE_SLOTS, itemHandler, pLevel);
             setChanged(pLevel, pPos, pState);
         }
         this.data.set(10, 0);
@@ -491,27 +491,18 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         ModUtils.useComponent(component, level, this.getBlockPos());
         ItemStack output = getOutputItem(pos, machineLevel);
         Random random = new Random();
-        int randomTier = random.nextInt(100 * (machineLevel + 1));
         int random1 = random.nextInt(100 * Math.max(machineLevel, 1));
 
-        if(random1 < machineLevel){
-            for(int i = 1; i < random1; i++){
+        if(random1 <= machineLevel+1){
+            for(int i = 1; i <= random1; i++){
                 insertItemOnInventory(new ItemStack(ModUtilsMiner.getCrystalType(Math.min(i, 8)).getItem()));
             }
         }
 
-        //for(int i = 1; i < (machineLevel +1); i++){
-        //    if(random1 < i){
-        //        insertItemOnInventory(new ItemStack(ModUtilsMiner.getCrystalType(Math.min(i, 8)).getItem()));
-        //    }
-        //}
-
-        insertItemOnInventory(randomTier <= 1 ? new ItemStack(ModUtilsMiner.getCrystalType(Math.min(machineLevel + 1, 7)).getItem()) : output);
+        insertItemOnInventory(output);
         if(ModUtils.getMuffler(itemHandler, UPGRADE_SLOTS) <= 0) {
             level.playSound(null, this.getBlockPos(), SoundEvents.BEE_HURT, SoundSource.BLOCKS, 0.1f, 1.0f);
         }
-
-
     }
 
     private boolean hasRecipe(BlockPos pos, int machineLevel) {
