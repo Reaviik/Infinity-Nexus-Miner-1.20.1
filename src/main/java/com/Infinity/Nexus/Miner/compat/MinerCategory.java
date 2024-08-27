@@ -55,7 +55,7 @@ public class MinerCategory implements IRecipeCategory<MinerRecipes> {
     @Override
     public void draw(MinerRecipes recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
         Minecraft minecraft = Minecraft.getInstance();
-        guiGraphics.drawString(minecraft.font, recipe.getEnergy() + " FE", 6, 76, 0xFFFFFF, false);
+        guiGraphics.drawString(minecraft.font, recipe.getEnergy() + " FE §f/ §eFortune: " + (recipe.getFortune() ? "§aYes" : "§cNo"), 6, 76, 0xFFFFFF, false);
     }
 
     @Override

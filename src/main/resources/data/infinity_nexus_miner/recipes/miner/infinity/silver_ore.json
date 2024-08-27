@@ -1,0 +1,20 @@
+{
+  "type": "infinity_nexus_miner:mining",
+  "energy": 100,
+  "level": 4,
+  "fortune": true,
+  "ingredient": [
+    {
+      "tag": "forge:ores/silver"
+    }
+  ],
+  "output": {
+    "item": "infinity_nexus_mod:raw_silver"
+  },
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "infinity_nexus_mod"
+    }
+  ]
+}

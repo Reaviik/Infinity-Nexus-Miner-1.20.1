@@ -1,0 +1,20 @@
+{
+  "type": "infinity_nexus_miner:mining",
+  "energy": 100,
+  "level": 4,
+  "fortune": true,
+  "ingredient": [
+    {
+      "item": "bigreactors:deepslate_yellorite_ore"
+    }
+  ],
+  "output": {
+    "item": "bigreactors:raw_yellorium"
+  },
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "bigreactors"
+    }
+  ]
+}

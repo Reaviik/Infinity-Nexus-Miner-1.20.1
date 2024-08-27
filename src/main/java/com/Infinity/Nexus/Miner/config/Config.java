@@ -1,6 +1,9 @@
 package com.Infinity.Nexus.Miner.config;
 
 import com.Infinity.Nexus.Miner.InfinityNexusMiner;
+import com.Infinity.Nexus.Miner.block.entity.MinerBlockEntity;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -16,28 +19,10 @@ public class Config
 
     //Define a Constante de Configuração
     private static final ForgeConfigSpec.BooleanValue AS_INFINITY_MOD_INSTALLED = BUILDER.comment("O Mod Infinity Nexus Machines esta istalado?").define("as_infinity_mod_installed", false);
-    private static final ForgeConfigSpec.ConfigValue<List<String>> ITEM_COMPONENT_LIST = BUILDER
-            .comment("Lista de Itens Componentes para a Mineradora do Level 1 ao 9")
-            .define("list_of_components", List.of(
-                    "infinity_nexus_core:redstone_component",
-                    "infinity_nexus_core:basic_component",
-                    "infinity_nexus_core:reinforced_component",
-                    "infinity_nexus_core:logic_component",
-                    "infinity_nexus_core:advanced_component",
-                    "infinity_nexus_core:refined_component",
-                    "infinity_nexus_core:integral_component",
-                    "infinity_nexus_core:infinity_component",
-                    "infinity_nexus_core:ancestral_component"
-            ));
+
     private static final ForgeConfigSpec.BooleanValue MINER_MINE_COST_COMPONENT_DURABILITY = BUILDER
             .comment("Define ao minerar o componente de perderá durabilidade (se o componente não for um item duravel ele será consumido)")
             .define("miner_mining_cost_component_durability", false);
-    private static final ForgeConfigSpec.ConfigValue<List<String>> ITEM_UPGRADE_LIST = BUILDER
-            .comment("Lista de Itens Upgrades para a Mineradora 1° = speed, 2° = Eficiencia de energia")
-            .define("list_of_upgrades", List.of(
-                    "infinity_nexus_core:speed_upgrade",
-                    "infinity_nexus_core:strength_upgrade"
-            ));
     private static final ForgeConfigSpec.ConfigValue<List<String>> BLOCK_STRUCTURE_LIST = BUILDER
             .comment("Lista de Blocos de estrutura para a Mineradora do Level 1 ao 9")
             .define("list_of_structures", List.of(
@@ -65,8 +50,6 @@ public class Config
 
     //Cria as Variaveis de Configuração
     public static boolean as_infinity_mod_installed;
-    public static List<String> list_of_components;
-    public static List<String> list_of_upgrades;
     public static List<String> list_of_structures;
     public static int max_fortune_level;
 
@@ -85,8 +68,6 @@ public class Config
         //Carrega as variaveis de Configuração para a memoria para uso posterior
         as_infinity_mod_installed = AS_INFINITY_MOD_INSTALLED.get();
 
-        list_of_components = ITEM_COMPONENT_LIST.get();
-        list_of_upgrades = ITEM_UPGRADE_LIST.get();
         list_of_structures = BLOCK_STRUCTURE_LIST.get();
 
         max_fortune_level = MAX_FORTUNE_LEVEL.get();
@@ -99,5 +80,37 @@ public class Config
 
         energy_per_operation_base = ENERGY_PER_OPERATION_BASE.get();
         miner_can_be_use_silk_touch = CAN_BE_USER_SILK_TOUCH.get();
+    }
+
+    public static void reloadConfig(CommandSourceStack source) {
+        source.sendSystemMessage(Component.literal("§eReloading: §bStructures..."));
+        source.sendSystemMessage(Component.literal("§cStructures unloaded: §c"+ list_of_structures));
+        list_of_structures = BLOCK_STRUCTURE_LIST.get();
+        source.sendSystemMessage(Component.literal("§bStructures loaded: §a"+ list_of_structures));
+
+        source.sendSystemMessage(Component.literal("§eReloading: §bMax Fortune Level..."));
+        source.sendSystemMessage(Component.literal("§c"+ max_fortune_level +" §cMax Fortune Level unloaded!"));
+        max_fortune_level = MAX_FORTUNE_LEVEL.get();
+        source.sendSystemMessage(Component.literal("§a"+ max_fortune_level +" §bMax Fortune Level loaded!"));
+
+        source.sendSystemMessage(Component.literal("§eReloading: §bMiner Fuel Multiplier..."));
+        source.sendSystemMessage(Component.literal("§c"+ miner_fuel_multiplier +" §cMiner Fuel Multiplier unloaded!"));
+        miner_fuel_multiplier = MINER_FUEL_MULTIPLIER.get();
+        source.sendSystemMessage(Component.literal("§a"+ miner_fuel_multiplier +" §bMiner Fuel Multiplier loaded!"));
+
+        source.sendSystemMessage(Component.literal("§eReloading: §bMiner Operation Cost Component Durability..."));
+        source.sendSystemMessage(Component.literal("§c"+ miner_mining_cost_component_durability +" §cMiner Operation Cost Component Durability unloaded!"));
+        miner_mining_cost_component_durability = MINER_MINE_COST_COMPONENT_DURABILITY.get();
+        source.sendSystemMessage(Component.literal("§a"+ miner_mining_cost_component_durability +" §bMiner Operation Cost Component Durability loaded!"));
+
+        source.sendSystemMessage(Component.literal("§eReloading: §bMiner Energy Per Operation..."));
+        source.sendSystemMessage(Component.literal("§c"+ energy_per_operation_base +" §cMiner Energy Per Operation unloaded!"));
+        energy_per_operation_base = ENERGY_PER_OPERATION_BASE.get();
+        source.sendSystemMessage(Component.literal("§a"+ energy_per_operation_base +" §bMiner Energy Per Operation loaded!"));
+
+        source.sendSystemMessage(Component.literal("§eReloading: §bMiner Can Be Use Silk Touch..."));
+        source.sendSystemMessage(Component.literal("§c"+ miner_can_be_use_silk_touch +" §cMiner Can Be Use Silk Touch unloaded!"));
+        miner_can_be_use_silk_touch = CAN_BE_USER_SILK_TOUCH.get();
+        source.sendSystemMessage(Component.literal("§a"+ miner_can_be_use_silk_touch +" §bMiner Can Be Use Silk Touch loaded!"));
     }
 }

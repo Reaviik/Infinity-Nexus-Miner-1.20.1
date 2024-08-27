@@ -1,0 +1,20 @@
+{
+  "type": "infinity_nexus_miner:mining",
+  "energy": 100,
+  "level": 1,
+  "fortune": true,
+  "ingredient": [
+    {
+      "tag": "forge:ores/xpetrified_ore"
+    }
+  ],
+  "output": {
+    "item": "forbidden_arcanus:xpetrified_orb"
+  },
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "forbidden_arcanus"
+    }
+  ]
+}

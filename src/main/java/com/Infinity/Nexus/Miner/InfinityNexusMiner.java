@@ -96,7 +96,7 @@ public class InfinityNexusMiner
         LOGGER.info("   §4/ /§5/  |/ §9/ /_   / /§3/  |/ // /  §b/ /   \\  / ");
         LOGGER.info(" §4_/ /§5/ /|  §9/ __/ _/ /§3/ /|  // /  §b/ /    / /  ");
         LOGGER.info("§4/___§5/_/ |_§9/_/   /___§3/_/ |_/___/ §b/_/    /_/   ");
-        LOGGER.info("§b     Infinity Nexus Multiblock Miner");
+        LOGGER.info("§b     Infinity Nexus Miner");
 
     }
 }

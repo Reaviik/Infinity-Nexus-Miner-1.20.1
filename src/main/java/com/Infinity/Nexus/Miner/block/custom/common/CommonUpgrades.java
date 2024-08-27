@@ -1,7 +1,7 @@
 package com.Infinity.Nexus.Miner.block.custom.common;
 
+import com.Infinity.Nexus.Core.utils.ModUtils;
 import com.Infinity.Nexus.Miner.block.entity.MinerBlockEntity;
-import com.Infinity.Nexus.Miner.config.ConfigUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
@@ -16,8 +16,8 @@ public class CommonUpgrades {
     public static void setUpgrades(Level pLevel, BlockPos pPos, Player pPlayer) {
         BlockEntity entity = pLevel.getBlockEntity(pPos);
         ItemStack stack = pPlayer.getMainHandItem().copy();
-        boolean component = ConfigUtils.isComponentItem(stack.getItem());
-        boolean upgrade = ConfigUtils.isUpgradeItem(stack.getItem());
+        boolean component = ModUtils.isComponent(stack);
+        boolean upgrade = ModUtils.isUpgrade(stack);
         if (pPlayer instanceof ServerPlayer) {
             if (component) {
                 if (entity instanceof MinerBlockEntity be) {

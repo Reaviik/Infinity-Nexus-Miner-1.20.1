@@ -7,6 +7,7 @@ import com.Infinity.Nexus.Core.items.ModItems;
 import com.Infinity.Nexus.Core.utils.ModEnergyStorage;
 import com.Infinity.Nexus.Core.utils.ModUtils;
 import com.Infinity.Nexus.Miner.block.custom.Miner;
+import com.Infinity.Nexus.Miner.block.entity.wrappedHandlerMap.MinerHandler;
 import com.Infinity.Nexus.Miner.config.Config;
 import com.Infinity.Nexus.Miner.config.ConfigUtils;
 import com.Infinity.Nexus.Miner.recipes.MinerRecipes;
@@ -36,6 +37,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeHooks;
@@ -62,9 +64,9 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         @Override
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
             return switch (slot) {
-                case 0, 1, 2, 3, 4, 5, 6, 7, 8 -> !ConfigUtils.isComponentItem(stack.getItem()) || !ConfigUtils.isUpgradeItem(stack.getItem());
-                case 9, 10, 11, 12 -> ConfigUtils.isUpgradeItem(stack.getItem());
-                case 13 -> ConfigUtils.isComponentItem(stack.getItem());
+                case 0, 1, 2, 3, 4, 5, 6, 7, 8 -> !ModUtils.isComponent(stack) || !ModUtils.isUpgrade(stack);
+                case 9, 10, 11, 12 -> ModUtils.isUpgrade(stack);
+                case 13 -> ModUtils.isComponent(stack);
                 //TODO
                 case 14 -> stack.getItem() == Items.ENCHANTED_BOOK || stack.isEnchanted();
                 case 15 -> stack.is(ModItems.LINKING_TOOL.get().asItem());
@@ -101,13 +103,15 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
     private LazyOptional<IEnergyStorage> lazyEnergyStorage = LazyOptional.empty();
 
 
-    private final Map<Direction, LazyOptional<WrappedHandler>> directionWrappedHandlerMap = Map.of(
-            Direction.UP, LazyOptional.of(() -> new WrappedHandler(itemHandler, (i) -> i < 9, (i, s) -> i > 8 && i != 18 && !(ConfigUtils.isComponentItem(s.getItem()) || ConfigUtils.isUpgradeItem(s.getItem())) || i == 17 && ConfigUtils.isStructure(s.getItem()))),
-            Direction.DOWN, LazyOptional.of(() -> new WrappedHandler(itemHandler, (i) -> i < 9, (i, s) -> i > 8 && i != 18 && !(ConfigUtils.isComponentItem(s.getItem()) || ConfigUtils.isUpgradeItem(s.getItem())) || i == 17 && ConfigUtils.isStructure(s.getItem()))),
-            Direction.NORTH, LazyOptional.of(() -> new WrappedHandler(itemHandler, (i) -> i < 9, (i, s) -> i > 8 && i != 18 && !(ConfigUtils.isComponentItem(s.getItem()) || ConfigUtils.isUpgradeItem(s.getItem())) || i == 17 && ConfigUtils.isStructure(s.getItem()))),
-            Direction.SOUTH, LazyOptional.of(() -> new WrappedHandler(itemHandler, (i) -> i < 9, (i, s) -> i > 8 && i != 18 && !(ConfigUtils.isComponentItem(s.getItem()) || ConfigUtils.isUpgradeItem(s.getItem())) || i == 17 && ConfigUtils.isStructure(s.getItem()))),
-            Direction.EAST, LazyOptional.of(() -> new WrappedHandler(itemHandler, (i) -> i < 9, (i, s) -> i > 8 && i != 18 && !(ConfigUtils.isComponentItem(s.getItem()) || ConfigUtils.isUpgradeItem(s.getItem())) || i == 17 && ConfigUtils.isStructure(s.getItem()))),
-            Direction.WEST, LazyOptional.of(() -> new WrappedHandler(itemHandler, (i) -> i < 9, (i, s) -> i > 8 && i != 18 && !(ConfigUtils.isComponentItem(s.getItem()) || ConfigUtils.isUpgradeItem(s.getItem())) || i == 17 && ConfigUtils.isStructure(s.getItem()))));
+    private final Map<Direction, LazyOptional<WrappedHandler>> directionWrappedHandlerMap =
+            Map.of(
+                    Direction.UP, LazyOptional.of(() -> new WrappedHandler(itemHandler, (i) -> MinerHandler.extract(i, Direction.UP), MinerHandler::insert)),
+                    Direction.DOWN, LazyOptional.of(() -> new WrappedHandler(itemHandler, (i) -> MinerHandler.extract(i, Direction.DOWN), MinerHandler::insert)),
+                    Direction.NORTH, LazyOptional.of(() -> new WrappedHandler(itemHandler, (i) -> MinerHandler.extract(i, Direction.NORTH), MinerHandler::insert)),
+                    Direction.SOUTH, LazyOptional.of(() -> new WrappedHandler(itemHandler, (i) -> MinerHandler.extract(i, Direction.SOUTH), MinerHandler::insert)),
+                    Direction.EAST, LazyOptional.of(() -> new WrappedHandler(itemHandler, (i) -> MinerHandler.extract(i, Direction.EAST), MinerHandler::insert)),
+                    Direction.WEST, LazyOptional.of(() -> new WrappedHandler(itemHandler, (i) -> MinerHandler.extract(i, Direction.WEST), MinerHandler::insert)));
+
 
     protected final ContainerData data;
     private int progress = 0;
@@ -430,13 +434,13 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     private boolean hasComponent() {
-        return ConfigUtils.isComponentItem(itemHandler.getStackInSlot(COMPONENT_SLOT).getItem());
+        return ModUtils.isComponent(itemHandler.getStackInSlot(COMPONENT_SLOT));
     }
 
     private void extractEnergy(MinerBlockEntity minerBlockEntity, int machineLevel) {
         int energy = ((machineLevel + 1) * Config.energy_per_operation_base);
-        int speed = Math.max(ConfigUtils.getSpeed(itemHandler, UPGRADE_SLOTS), 2) + machineLevel;
-        int strength = (ConfigUtils.getStrength(itemHandler, UPGRADE_SLOTS) * 10);
+        int speed = Math.max(ModUtils.getSpeed(itemHandler, UPGRADE_SLOTS), 2) + machineLevel;
+        int strength = (ModUtils.getStrength(itemHandler, UPGRADE_SLOTS) * 10);
 
         int var1 = energy * speed;
 
@@ -447,8 +451,8 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
     private boolean hasEnoughEnergy(int machineLevel) {
 
         int energy = ((machineLevel + 1) * Config.energy_per_operation_base);
-        int speed = Math.max(ConfigUtils.getSpeed(itemHandler, UPGRADE_SLOTS), 2) + machineLevel;
-        int strength = (ConfigUtils.getStrength(itemHandler, UPGRADE_SLOTS) * 10);
+        int speed = Math.max(ModUtils.getSpeed(itemHandler, UPGRADE_SLOTS), 2) + machineLevel;
+        int strength = (ModUtils.getStrength(itemHandler, UPGRADE_SLOTS) * 10);
 
         int var1 = energy * speed;
 
@@ -488,10 +492,12 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
 
     private void craftItem(BlockPos pos, int machineLevel) {
         ItemStack component = this.itemHandler.getStackInSlot(COMPONENT_SLOT);
-        ModUtils.useComponent(component, level, this.getBlockPos());
         ItemStack output = getOutputItem(pos, machineLevel);
         Random random = new Random();
         int random1 = random.nextInt(100 * Math.max(machineLevel, 1));
+        if(Config.miner_mining_cost_component_durability){
+            ModUtils.useComponent(component, level, this.getBlockPos());
+        }
 
         if(random1 <= machineLevel+1){
             for(int i = 1; i <= random1; i++){
@@ -524,11 +530,12 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
     private ItemStack getOutputItem(BlockPos pos, int machineLevel) {
         Optional<MinerRecipes> recipe = getCurrentRecipe();
         List<ItemStack> drops = new ArrayList<>();
-        int radio = ((int) Math.floor((double) machineLevel / 2) + 1);
+        int levelMatch = (machineLevel == 8 ? 7 : machineLevel);
+        int radio = ((int) Math.floor((double) levelMatch / 2) + 1);
 
         int startX = pos.getX() - radio;
         ;
-        int startY = pos.getY() - ((int) Math.floor((double) (machineLevel + 4) / 2) * 2);
+        int startY = pos.getY() - ((int) Math.floor((double) levelMatch + 4) / 2) * 2;
         int startZ = pos.getZ() - radio;
 
         int endX = pos.getX() + radio;
@@ -559,13 +566,18 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
                 }
             }
         }
-        if (drops.isEmpty()) {
-            try {
-                ItemStack recipeItem = recipe.get().getResultItem(null);
-                drops.add(recipeItem);
-            }catch (Exception e){
-                drops.add(ItemStack.EMPTY);
+        try {
+            if (drops.isEmpty()) {
+                    ItemStack recipeItem = recipe.get().getResultItem(null);
+                    drops.add(recipeItem);
             }
+            if(!recipe.get().getFortune()){
+                ItemStack recipeItem = recipe.get().getResultItem(null);
+                drops.clear();
+                drops.add(recipeItem);
+            }
+        }catch (Exception e){
+            drops.add(ItemStack.EMPTY);
         }
         return drops.get(new Random().nextInt(drops.size()));
     }
@@ -658,7 +670,7 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     private int getMachineLevel() {
-        return ConfigUtils.getComponentLevel(this.itemHandler.getStackInSlot(COMPONENT_SLOT).getItem());
+        return ModUtils.getComponentLevel(this.itemHandler.getStackInSlot(COMPONENT_SLOT));
     }
 
     private boolean isRedstonePowered(BlockPos pPos) {

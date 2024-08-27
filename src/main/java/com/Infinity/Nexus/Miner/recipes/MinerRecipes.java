@@ -1,8 +1,8 @@
 package com.Infinity.Nexus.Miner.recipes;
 
+import com.Infinity.Nexus.Core.utils.ModUtils;
 import com.Infinity.Nexus.Miner.InfinityNexusMiner;
 import com.Infinity.Nexus.Miner.block.entity.MinerBlockEntity;
-import com.Infinity.Nexus.Miner.config.ConfigUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.core.NonNullList;
@@ -42,7 +42,7 @@ public class MinerRecipes implements Recipe<SimpleContainer> {
         }
         int componentSlot = MinerBlockEntity.getComponentSlot();
         ItemStack stack = pContainer.getItem(componentSlot);
-        return (ConfigUtils.getComponentLevel(stack.getItem()) >= level) && inputItems.get(0).test(pContainer.getItem(MinerBlockEntity.getRecipeSlot()));
+        return (ModUtils.getComponentLevel(stack) >= level) && inputItems.get(0).test(pContainer.getItem(MinerBlockEntity.getRecipeSlot()));
     }
 
     @Override
@@ -72,11 +72,10 @@ public class MinerRecipes implements Recipe<SimpleContainer> {
     public int getEnergy() {
         return energy;
     }
+
     public boolean getFortune() {
         return fortune;
     }
-
-
     @Override
     public ResourceLocation getId() {
         return id;

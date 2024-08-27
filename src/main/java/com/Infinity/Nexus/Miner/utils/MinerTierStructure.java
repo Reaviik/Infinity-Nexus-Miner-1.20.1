@@ -1,5 +1,6 @@
 package com.Infinity.Nexus.Miner.utils;
 
+import com.Infinity.Nexus.Core.fakePlayer.IFFakePlayer;
 import com.Infinity.Nexus.Miner.block.ModBlocksMiner;
 import com.Infinity.Nexus.Miner.block.entity.MinerBlockEntity;
 import com.Infinity.Nexus.Miner.config.Config;
@@ -7,10 +8,15 @@ import com.Infinity.Nexus.Miner.config.ConfigUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -118,11 +124,20 @@ public class MinerTierStructure {
     }
     private static void place(BlockState blockState, BlockPos pos, Level level, IItemHandler itemHandler, int structureSlot, int tier) {
         if (blockState.getBlock() == ModBlocksMiner.STRUCTURAL_BLOCK.get() || blockState.is(Blocks.AIR)){
+            IFFakePlayer fakePlayer = new IFFakePlayer((ServerLevel) level);
             if(getStructureAmount(itemHandler, structureSlot, tier) >= 1) {
-                removeStructureFromSlots(itemHandler, structureSlot);
-                level.setBlock(pos, Block.byItem(ConfigUtils.getStructureByLevel(tier).getItem()).defaultBlockState(), 3);
+                fakePlayer.setItemInHand(InteractionHand.MAIN_HAND, itemHandler.getStackInSlot(structureSlot).copy());
+                fakePlayer.gameMode.useItemOn(fakePlayer, level, itemHandler.getStackInSlot(structureSlot), InteractionHand.MAIN_HAND, new BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos, false));
+                if(itemHandler.getStackInSlot(structureSlot).is(level.getBlockState(pos).getBlock().asItem())) {
+                    removeStructureFromSlots(itemHandler, structureSlot);
+                }
+                //level.setBlock(pos, Block.byItem(ConfigUtils.getStructureByLevel(tier).getItem()).defaultBlockState(), 3);
             }else{
-                level.setBlockAndUpdate(pos, ModBlocksMiner.STRUCTURAL_BLOCK.get().defaultBlockState());
+                if(blockState.is(Blocks.AIR)) {
+                    fakePlayer.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModBlocksMiner.STRUCTURAL_BLOCK.get()));
+                    fakePlayer.gameMode.useItemOn(fakePlayer, level, new ItemStack(ModBlocksMiner.STRUCTURAL_BLOCK.get()), InteractionHand.MAIN_HAND, new BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos, false));
+                    //level.setBlockAndUpdate(pos, ModBlocksMiner.STRUCTURAL_BLOCK.get().defaultBlockState());
+                }
             }
         }
     }
