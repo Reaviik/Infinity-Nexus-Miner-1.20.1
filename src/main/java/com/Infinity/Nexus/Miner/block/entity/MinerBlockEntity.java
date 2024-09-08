@@ -521,6 +521,7 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         return this.structure > 0;
     }
     private Optional<MinerRecipes> getCurrentRecipe() {
+
         SimpleContainer inventory = new SimpleContainer(itemHandler.getSlots());
         for (int i = 0; i < itemHandler.getSlots(); i++) {
             inventory.setItem(i, itemHandler.getStackInSlot(i));
@@ -528,7 +529,8 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         return this.level.getRecipeManager().getRecipeFor(MinerRecipes.Type.INSTANCE, inventory, this.level);
     }
     private ItemStack getOutputItem(BlockPos pos, int machineLevel) {
-        Optional<MinerRecipes> recipe = getCurrentRecipe();
+        Optional<MinerRecipes> recipe = Optional.empty();
+
         List<ItemStack> drops = new ArrayList<>();
         int levelMatch = (machineLevel == 8 ? 7 : machineLevel);
         int radio = ((int) Math.floor((double) levelMatch / 2) + 1);
@@ -556,7 +558,8 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
                         BlockState blockState = level.getBlockState(blockPos);
                         ItemStack blockStack = new ItemStack(blockState.getBlock().asItem());
                         itemHandler.setStackInSlot(RECIPE_SLOT, blockStack);
-                        if (recipe.isPresent()) {
+                        recipe = getCurrentRecipe();
+                        if (!recipe.isEmpty()) {
                             if (blockState.isAir() || isOre(blockStack)) {
                                 ItemStack drop = ModUtilsMiner.getDrop(blockStack, level, blockPos, getPickaxe());
                                 drops.add(Objects.requireNonNullElse(drop, ItemStack.EMPTY));
