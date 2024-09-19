@@ -8,6 +8,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.GlassBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
@@ -22,7 +23,17 @@ import java.util.function.Supplier;
 public class ModBlocksMiner {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, InfinityNexusMiner.MOD_ID);
     public static final RegistryObject<Block> MINER = registerBlock("miner", () -> new Miner(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).requiresCorrectToolForDrops().strength(3.0f, 6.0f).lightLevel((state) -> state.getValue(Miner.LIT) >= 8 ? 2 : 0).noOcclusion().mapColor(MapColor.METAL)));
-    public static final RegistryObject<Block> STRUCTURAL_BLOCK = registerBlock("structural_block", () -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE).replaceable().noLootTable().noOcclusion().noCollission().noParticlesOnBreak().mapColor(MapColor.COLOR_RED)));
+    public static final RegistryObject<Block> STRUCTURAL_BLOCK = registerBlock("structural_block", () -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE).replaceable().noLootTable().noOcclusion().noCollission().noParticlesOnBreak().mapColor(MapColor.COLOR_RED).instabreak()));
+
+    public static final RegistryObject<Block> PURPLE_CLEAR_GLASS = registerBlock("purple_clear_glass", () -> new GlassBlock(BlockBehaviour.Properties.copy(Blocks.GLASS).strength(0.3f, 0.1f).sound(SoundType.GLASS).lightLevel((state) -> 5).noOcclusion().mapColor(MapColor.COLOR_RED)));
+    public static final RegistryObject<Block> YELLOW_CLEAR_GLASS = registerBlock("yellow_clear_glass", () -> new GlassBlock(BlockBehaviour.Properties.copy(Blocks.GLASS).strength(0.3f, 0.1f).sound(SoundType.GLASS).lightLevel((state) -> 5).noOcclusion().mapColor(MapColor.COLOR_RED)));
+    public static final RegistryObject<Block> WHITE_CLEAR_GLASS = registerBlock("white_clear_glass", () -> new GlassBlock(BlockBehaviour.Properties.copy(Blocks.GLASS).strength(0.3f, 0.1f).sound(SoundType.GLASS).lightLevel((state) -> 5).noOcclusion().mapColor(MapColor.COLOR_RED)));
+    public static final RegistryObject<Block> RED_CLEAR_GLASS = registerBlock("red_clear_glass", () -> new GlassBlock(BlockBehaviour.Properties.copy(Blocks.GLASS).strength(0.3f, 0.1f).sound(SoundType.GLASS).lightLevel((state) -> 5).noOcclusion().mapColor(MapColor.COLOR_RED)));
+    public static final RegistryObject<Block> ORANGE_CLEAR_GLASS = registerBlock("orange_clear_glass", () -> new GlassBlock(BlockBehaviour.Properties.copy(Blocks.GLASS).strength(0.3f, 0.1f).sound(SoundType.GLASS).lightLevel((state) -> 5).noOcclusion().mapColor(MapColor.COLOR_RED)));
+    public static final RegistryObject<Block> BLUE_CLEAR_GLASS = registerBlock("blue_clear_glass", () -> new GlassBlock(BlockBehaviour.Properties.copy(Blocks.GLASS).strength(0.3f, 0.1f).sound(SoundType.GLASS).lightLevel((state) -> 5).noOcclusion().mapColor(MapColor.COLOR_RED)));
+    public static final RegistryObject<Block> PINK_CLEAR_GLASS = registerBlock("pink_clear_glass", () -> new GlassBlock(BlockBehaviour.Properties.copy(Blocks.GLASS).strength(0.3f, 0.1f).sound(SoundType.GLASS).lightLevel((state) -> 5).noOcclusion().mapColor(MapColor.COLOR_RED)));
+    public static final RegistryObject<Block> GREEN_CLEAR_GLASS = registerBlock("green_clear_glass", () -> new GlassBlock(BlockBehaviour.Properties.copy(Blocks.GLASS).strength(0.3f, 0.1f).sound(SoundType.GLASS).lightLevel((state) -> 5).noOcclusion().mapColor(MapColor.COLOR_RED)));
+    public static final RegistryObject<Block> ANCIENT_CLEAR_GLASS = registerBlock("ancient_clear_glass", () -> new GlassBlock(BlockBehaviour.Properties.copy(Blocks.GLASS).strength(0.3f, 0.1f).sound(SoundType.GLASS).lightLevel((state) -> 5).noOcclusion().mapColor(MapColor.COLOR_RED)));
 
     public static final RegistryObject<Block> WOOD_STRUCTURE = registerBlock("wood_structure",() -> new Block(BlockBehaviour.Properties.copy(Blocks.OAK_WOOD).requiresCorrectToolForDrops().strength(2.0f, 1.0f).sound(SoundType.WOOD).mapColor(MapColor.WOOD)));
     public static final RegistryObject<Block> STONE_STRUCTURE = registerBlock("stone_structure",() -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE).requiresCorrectToolForDrops().strength(2.0f, 3.0f).sound(SoundType.COPPER).mapColor(MapColor.COLOR_ORANGE)));

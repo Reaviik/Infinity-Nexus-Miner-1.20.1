@@ -36,12 +36,12 @@ public class ModTab {
                         //-------------------------//-------------------------//
                         //Lights
                         pOutput.accept(new ItemStack(ModBlocksMiner.WHITE_LIGHT_CRYSTAL.get()));
-                        pOutput.accept(new ItemStack(ModBlocksMiner.PINK_LIGHT_CRYSTAL.get()));
-                        pOutput.accept(new ItemStack(ModBlocksMiner.PURPLE_LIGHT_CRYSTAL.get()));
-                        pOutput.accept(new ItemStack(ModBlocksMiner.BLUE_LIGHT_CRYSTAL.get()));
-                        pOutput.accept(new ItemStack(ModBlocksMiner.GREEN_LIGHT_CRYSTAL.get()));
                         pOutput.accept(new ItemStack(ModBlocksMiner.YELLOW_LIGHT_CRYSTAL.get()));
+                        pOutput.accept(new ItemStack(ModBlocksMiner.BLUE_LIGHT_CRYSTAL.get()));
                         pOutput.accept(new ItemStack(ModBlocksMiner.ORANGE_LIGHT_CRYSTAL.get()));
+                        pOutput.accept(new ItemStack(ModBlocksMiner.GREEN_LIGHT_CRYSTAL.get()));
+                        pOutput.accept(new ItemStack(ModBlocksMiner.PURPLE_LIGHT_CRYSTAL.get()));
+                        pOutput.accept(new ItemStack(ModBlocksMiner.PINK_LIGHT_CRYSTAL.get()));
                         pOutput.accept(new ItemStack(ModBlocksMiner.RED_LIGHT_CRYSTAL.get()));
                         pOutput.accept(new ItemStack(ModBlocksMiner.ANCIENT_LIGHT_CRYSTAL.get()));
                         //-------------------------//-------------------------//
@@ -55,7 +55,18 @@ public class ModTab {
                         pOutput.accept(new ItemStack(ModItemsMiner.DARIUM_CRYSTAL.get()));
                         pOutput.accept(new ItemStack(ModItemsMiner.TERMURIUM_CRYSTAL.get()));
                         //-------------------------//-------------------------//
-                        //Blocks
+                        //Glasses
+                        pOutput.accept(new ItemStack(ModBlocksMiner.WHITE_CLEAR_GLASS.get()));
+                        pOutput.accept(new ItemStack(ModBlocksMiner.YELLOW_CLEAR_GLASS.get()));
+                        pOutput.accept(new ItemStack(ModBlocksMiner.BLUE_CLEAR_GLASS.get()));
+                        pOutput.accept(new ItemStack(ModBlocksMiner.ORANGE_CLEAR_GLASS.get()));
+                        pOutput.accept(new ItemStack(ModBlocksMiner.GREEN_CLEAR_GLASS.get()));
+                        pOutput.accept(new ItemStack(ModBlocksMiner.PURPLE_CLEAR_GLASS.get()));
+                        pOutput.accept(new ItemStack(ModBlocksMiner.PINK_CLEAR_GLASS.get()));
+                        pOutput.accept(new ItemStack(ModBlocksMiner.RED_CLEAR_GLASS.get()));
+                        pOutput.accept(new ItemStack(ModBlocksMiner.ANCIENT_CLEAR_GLASS.get()));
+                        //-------------------------//-------------------------//
+                        //Structural Block
                         //pOutput.accept(new ItemStack(ModBlocks.STRUCTURAL_BLOCK.get()));
                         //-------------------------//-------------------------//
 

@@ -17,6 +17,16 @@
     "infinity_nexus_miner:green_light_crystal",
     "infinity_nexus_miner:blue_light_crystal",
     "infinity_nexus_miner:pink_light_crystal",
-    "infinity_nexus_miner:red_light_crystal"
+    "infinity_nexus_miner:red_light_crystal",
+
+    "infinity_nexus_miner:ancient_clear_glass",
+    "infinity_nexus_miner:white_clear_glass",
+    "infinity_nexus_miner:purple_clear_glass",
+    "infinity_nexus_miner:orange_clear_glass",
+    "infinity_nexus_miner:yellow_clear_glass",
+    "infinity_nexus_miner:green_clear_glass",
+    "infinity_nexus_miner:blue_clear_glass",
+    "infinity_nexus_miner:pink_clear_glass",
+    "infinity_nexus_miner:red_clear_glass"
   ]
 }

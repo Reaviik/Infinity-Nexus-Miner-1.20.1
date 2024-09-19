@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "tag": "forge:glass"
+    },
+    "B": {
+      "item": "infinity_nexus_miner:amber_crystal"
+    }
+  },
+  "pattern": [
+    "AAA",
+    "ABA",
+    "AAA"
+  ],
+  "result": {
+    "item": "infinity_nexus_miner:yellow_clear_glass"
+  },
+  "show_notification": true
+}

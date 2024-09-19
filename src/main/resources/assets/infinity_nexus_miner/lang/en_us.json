@@ -27,6 +27,16 @@
   "block.infinity_nexus_miner.blue_light_crystal": "Blue Light Crystal",
   "block.infinity_nexus_miner.ancient_light_crystal": "Ancient Light Crystal",
 
+  "block.infinity_nexus_miner.purple_clear_glass": "Purple Clear Glass",
+  "block.infinity_nexus_miner.yellow_clear_glass": "Yellow Clear Glass",
+  "block.infinity_nexus_miner.white_clear_glass": "White Clear Glass",
+  "block.infinity_nexus_miner.red_clear_glass": "Red Clear Glass",
+  "block.infinity_nexus_miner.orange_clear_glass": "Orange Clear Glass",
+  "block.infinity_nexus_miner.pink_clear_glass": "Pink Clear Glass",
+  "block.infinity_nexus_miner.green_clear_glass": "Green Clear Glass",
+  "block.infinity_nexus_miner.blue_clear_glass": "Blue Clear Glass",
+  "block.infinity_nexus_miner.ancient_clear_glass": "Ancient Clear Glass",
+
   "block.infinity_nexus_miner.wood_structure": "Wood Structure",
   "block.infinity_nexus_miner.stone_structure": "Stone Structure",
   "block.infinity_nexus_miner.copper_structure": "Copper Structure",

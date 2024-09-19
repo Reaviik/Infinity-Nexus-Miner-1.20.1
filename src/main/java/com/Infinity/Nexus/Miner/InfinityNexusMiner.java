@@ -84,6 +84,16 @@ public class InfinityNexusMiner
             ItemBlockRenderTypes.setRenderLayer(ModBlocksMiner.PINK_LIGHT_CRYSTAL.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(ModBlocksMiner.ANCIENT_LIGHT_CRYSTAL.get(), RenderType.translucent());
 
+            ItemBlockRenderTypes.setRenderLayer(ModBlocksMiner.RED_CLEAR_GLASS.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(ModBlocksMiner.BLUE_CLEAR_GLASS.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(ModBlocksMiner.GREEN_CLEAR_GLASS.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(ModBlocksMiner.YELLOW_CLEAR_GLASS.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(ModBlocksMiner.PURPLE_CLEAR_GLASS.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(ModBlocksMiner.ORANGE_CLEAR_GLASS.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(ModBlocksMiner.WHITE_CLEAR_GLASS.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(ModBlocksMiner.PINK_CLEAR_GLASS.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(ModBlocksMiner.ANCIENT_CLEAR_GLASS.get(), RenderType.translucent());
+
             ItemBlockRenderTypes.setRenderLayer(ModBlocksMiner.STRUCTURAL_BLOCK.get(), RenderType.translucent());
 
 
