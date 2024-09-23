@@ -17,7 +17,6 @@ import com.Infinity.Nexus.Miner.utils.ModUtilsMiner;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
@@ -29,15 +28,16 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeHooks;
@@ -283,7 +283,6 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
             return "X: " + this.data.get(11) + ", Y: " + this.data.get(12) + ", Z: " + this.data.get(13);
         } else {
             return "[Unlinked]";
-
         }
     }
 
@@ -368,6 +367,9 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
             this.data.set(7, 0);
             if(pState.getValue(Miner.LIT) != machineLevel) {
                 pLevel.setBlock(pPos, pState.setValue(Miner.LIT, machineLevel), 3);
+            }
+            if(hasProgressFinished()){
+                insertItemOnInventory(ItemStack.EMPTY);
             }
             notifyOwner(machineLevel, pLevel);
             return;
@@ -469,23 +471,31 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
 
         return tags.toString().contains("forge:ores");
     }
+    public void enchantPickaxe(ItemStack pikaxe, Map<Enchantment, Integer> enchantments) {
+        if (enchantments.isEmpty()) {
+            return;
+        }
 
+        for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
+            if (entry.getKey() != Enchantments.SILK_TOUCH || Config.miner_can_be_use_silk_touch) {
+                if (entry.getKey() == Enchantments.BLOCK_FORTUNE) {
+                    pikaxe.enchant(Enchantments.BLOCK_FORTUNE, Math.min(entry.getValue(), Config.max_fortune_level));
+                } else {
+                    pikaxe.enchant(entry.getKey(), entry.getValue());
+                }
+            }
+        }
+    }
     private ItemStack getPickaxe() {
         ItemStack enchantedItem = itemHandler.getStackInSlot(FORTUNE_SLOT);
         Item pickaxeInSlot = itemHandler.getStackInSlot(FORTUNE_SLOT).getItem();
         ItemStack pickaxe = new ItemStack(pickaxeInSlot instanceof PickaxeItem ? pickaxeInSlot.getDefaultInstance().getItem() : Items.NETHERITE_PICKAXE);
         Map<Enchantment, Integer> enchantments = enchantedItem.getAllEnchantments();
-        if(enchantedItem.getItem() instanceof EnchantedBookItem){
-            Tag enchantedBook = enchantedItem.getTag();
-            if(enchantedBook != null && !enchantedBook.toString().contains("silk_touch")){
-                pickaxe.enchant(Enchantments.BLOCK_FORTUNE, ModUtilsMiner.getFortuneLevel(enchantedItem));
-            }
-        }else{
-            for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
-                if (entry.getKey() == Enchantments.SILK_TOUCH && Config.miner_can_be_use_silk_touch) {
-                    pickaxe.enchant(entry.getKey(), entry.getValue());
-                }
-            }
+        if (enchantedItem.getItem() instanceof EnchantedBookItem) {
+            Map<Enchantment, Integer> enchantment = EnchantmentHelper.getEnchantments(enchantedItem);
+            enchantPickaxe(pickaxe, enchantment);
+        } else {
+            enchantPickaxe(pickaxe, enchantments);
         }
         return pickaxe;
     }
@@ -618,33 +628,35 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
                             facel = value;
                         }
                     }
-                    if (facel.equals("debug")) {
-                        Player player = level.getPlayerByUUID(this.customBlockData.getUUID("ownerUUID"));
-                        player.sendSystemMessage(Component.literal("Pos: " + this.data.get(11) + " " + this.data.get(12) + " " + this.data.get(13) + " " + facel));
-                        player.sendSystemMessage(Component.literal("Name: " + name));
-                    }
                     BlockEntity blockEntity = this.level.getBlockEntity(new BlockPos(xl, yl, zl));
-                    if (blockEntity != null && canLink(blockEntity)) {
-                        blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER, ModUtilsMiner.getLinkedSide(facel)).ifPresent(iItemHandler -> {
-                            for (int slot = 0; slot < iItemHandler.getSlots(); slot++) {
-                                if (ModUtils.canPlaceItemInContainer(itemStack.copy(), slot, iItemHandler) && iItemHandler.isItemValid(slot, itemStack.copy())) {
-                                    iItemHandler.insertItem(slot, itemStack.copy(), false);
-                                    success.set(true);
-                                    break;
-                                }
-                            }
-
-                            for (int slot = 0; slot < iItemHandler.getSlots(); slot++) {
-                                for (int outputSlot : OUTPUT_SLOT) {
-                                    if (!itemHandler.getStackInSlot(outputSlot).isEmpty() && iItemHandler.isItemValid(slot, itemStack.copy()) && ModUtils.canPlaceItemInContainer(itemHandler.getStackInSlot(outputSlot).copy(), slot, iItemHandler)) {
-                                        iItemHandler.insertItem(slot, itemHandler.getStackInSlot(outputSlot).copy(), false);
-                                        itemHandler.extractItem(outputSlot, itemHandler.getStackInSlot(outputSlot).getCount(), false);
+                    if (blockEntity.getBlockPos().equals(this.getBlockPos())) {
+                        level.addFreshEntity(new ItemEntity(level, xl, yl + 1, zl, itemHandler.getStackInSlot(LINK_SLOT).copy()));
+                        itemHandler.extractItem(LINK_SLOT, 1, false);
+                        return;
+                    }
+                    if(!itemHandler.getStackInSlot(OUTPUT_SLOT[7]).isEmpty()) {
+                        if (blockEntity != null && canLink(blockEntity)) {
+                            blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER, ModUtilsMiner.getLinkedSide(facel)).ifPresent(iItemHandler -> {
+                                for (int slot = 0; slot < iItemHandler.getSlots(); slot++) {
+                                    if (ModUtils.canPlaceItemInContainer(itemStack.copy(), slot, iItemHandler) && iItemHandler.isItemValid(slot, itemStack.copy())) {
+                                        iItemHandler.insertItem(slot, itemStack.copy(), false);
                                         success.set(true);
                                         break;
                                     }
                                 }
-                            }
-                        });
+
+                                for (int slot = 0; slot < iItemHandler.getSlots(); slot++) {
+                                    for (int outputSlot : OUTPUT_SLOT) {
+                                        if (!itemHandler.getStackInSlot(outputSlot).isEmpty() && iItemHandler.isItemValid(slot, itemStack.copy()) && ModUtils.canPlaceItemInContainer(itemHandler.getStackInSlot(outputSlot).copy(), slot, iItemHandler)) {
+                                            iItemHandler.insertItem(slot, itemHandler.getStackInSlot(outputSlot).copy(), false);
+                                            itemHandler.extractItem(outputSlot, itemHandler.getStackInSlot(outputSlot).getCount(), false);
+                                            success.set(true);
+                                            break;
+                                        }
+                                    }
+                                }
+                            });
+                        }
                     }
                 }
                 if (!success.get()) {
@@ -653,7 +665,6 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
             } else {
                 insertItemOnSelfInventory(itemStack);
             }
-
         } catch (Exception e) {
             System.out.println("§f[INM§f]§c: Failed to insert item in: " + this.getBlockPos());
         }

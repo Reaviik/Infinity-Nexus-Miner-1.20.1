@@ -42,23 +42,7 @@ public class ModUtilsMiner {
             default -> Direction.UP;
         };
     }
-    public static int getFortuneLevel(ItemStack fortuneItem) {
-        int enchantmentLevel = 0;
-        CompoundTag bookTag = fortuneItem.getTag();
-        if (bookTag != null && bookTag.contains("StoredEnchantments")) {
-            ListTag enchantmentsTag = bookTag.getList("StoredEnchantments", 10);
-            for (int i = 0; i < enchantmentsTag.size(); i++) {
-                CompoundTag enchantmentTag = enchantmentsTag.getCompound(i);
-                String enchantmentId = enchantmentTag.getString("id");
-                if (enchantmentId.equals("minecraft:fortune")) {
-                    enchantmentLevel = enchantmentTag.getShort("lvl");
-                    break;
-                }
-            }
-        }
-        return Math.min(enchantmentLevel, Config.max_fortune_level);
 
-    }
     public static ItemStack getDrop(ItemStack stack, Level level, BlockPos pos, ItemStack pickaxe) {
         if (!(stack.getItem() instanceof BlockItem)) {
             return null;
