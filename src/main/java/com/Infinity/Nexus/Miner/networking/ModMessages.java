@@ -40,4 +40,5 @@ public class ModMessages {
     public static <MSG> void sendToClients(MSG message) {
         INSTANCE.send(PacketDistributor.ALL.noArg(), message);
     }
+
 }

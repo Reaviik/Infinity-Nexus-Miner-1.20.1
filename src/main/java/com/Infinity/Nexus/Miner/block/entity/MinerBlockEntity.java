@@ -14,14 +14,17 @@ import com.Infinity.Nexus.Miner.recipes.MinerRecipes;
 import com.Infinity.Nexus.Miner.screen.miner.MinerMenu;
 import com.Infinity.Nexus.Miner.utils.MinerTierStructure;
 import com.Infinity.Nexus.Miner.utils.ModUtilsMiner;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
@@ -55,6 +58,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MinerBlockEntity extends BlockEntity implements MenuProvider {
     private CompoundTag customBlockData;
+    float rotation = 0;
     private final ItemStackHandler itemHandler = new ItemStackHandler(19) {
         @Override
         protected void onContentsChanged(int slot) {
@@ -341,7 +345,6 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
             return;
         }
         int machineLevel = getMachineLevel() - 1 <= 0 ? 0 : getMachineLevel() - 1;
-
         if (this.structure == 0) {
             if(pState.getValue(Miner.LIT) != machineLevel) {
                 pLevel.setBlock(pPos, pState.setValue(Miner.LIT, machineLevel), 3);
@@ -397,6 +400,7 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         }
         this.data.set(9, 1);
         if (hasRecipe(pPos, machineLevel)) {
+            renderParticles(pPos);
             this.data.set(10, 1);
             if(pState.getValue(Miner.LIT) != machineLevel + 9) {
                 pLevel.setBlock(pPos, pState.setValue(Miner.LIT, machineLevel + 9), 3);
@@ -409,6 +413,14 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         }
         this.data.set(10, 0);
 
+    }
+
+    private void renderParticles(BlockPos pPos) {
+        double x = pPos.getX()+0.5;
+        double y = pPos.getY()+1;
+        double z = pPos.getZ()+0.5;
+        var level = (ServerLevel) this.getLevel();
+        level.sendParticles(ParticleTypes.PORTAL, x, y, z, 12, 0, 0, 0, 0.1D);
     }
 
     private void notifyOwner(int machineLevel, Level pLevel) {
@@ -523,7 +535,7 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
 
     private boolean hasRecipe(BlockPos pos, int machineLevel) {
         if (this.verify >= maxVerify) {
-            this.structure = MinerTierStructure.hasStructure(machineLevel + 1, pos, level, itemHandler) ? 1 : 0;
+            this.structure = MinerTierStructure.hasStructure(machineLevel + 1, pos, level, itemHandler, false) ? 1 : 0;
             this.data.set(4, structure);
             this.verify = 0;
         }
@@ -727,8 +739,11 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         super.onDataPacket(net, pkt);
     }
 
-    private void makeStructure() {
-        MinerTierStructure.hasStructure(getMachineLevel(), this.getBlockPos(), this.level, this.itemHandler);
+    public void makeStructure() {
+        if(level.isClientSide()) {
+            return;
+        }
+        MinerTierStructure.hasStructure(getMachineLevel(), this.getBlockPos(), this.getLevel(), this.itemHandler, true);
     }
     public void resetVerify() {
         this.data.set(2, this.data.get(3));
@@ -749,6 +764,7 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
     public void setCustomBlockData(CompoundTag nbt) {
         this.customBlockData = nbt;
     }
+
     public void setMachineLevel(ItemStack itemStack, Player player) {
         SetMachineLevel.setMachineLevel(itemStack, player, this, COMPONENT_SLOT, this.itemHandler);
         makeStructure();
@@ -757,5 +773,13 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
     public void setUpgradeLevel(ItemStack itemStack, Player player) {
         SetUpgradeLevel.setUpgradeLevel(itemStack, player, this, UPGRADE_SLOTS, this.itemHandler);
         setChanged();
+    }
+
+    public ItemStack getRenderStack() {
+        return itemHandler.getStackInSlot(RECIPE_SLOT);
+    }
+
+    public float getRotation() {
+        return rotation = rotation < 360F ? (float) (rotation + 0.1) : 0.0F;
     }
 }

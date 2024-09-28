@@ -33,8 +33,8 @@ public class EnergySyncS2CPacket {
                   if(Minecraft.getInstance().level.getBlockEntity(pos) instanceof MinerBlockEntity blockEntity) {
                 blockEntity.setEnergyLevel(energy);
             }
-
         });
+        System.out.println(context);
         return true;
     }
 }

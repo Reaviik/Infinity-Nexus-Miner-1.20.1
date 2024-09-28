@@ -7,17 +7,23 @@ import com.Infinity.Nexus.Core.renderer.RenderScreenTooltips;
 import com.Infinity.Nexus.Core.utils.MouseUtil;
 import com.Infinity.Nexus.Miner.InfinityNexusMiner;
 import com.Infinity.Nexus.Miner.block.ModBlocksMiner;
+import com.Infinity.Nexus.Miner.block.entity.MinerBlockEntity;
+import com.Infinity.Nexus.Miner.networking.ModMessages;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +33,7 @@ public class MinerScreen extends AbstractContainerScreen<MinerMenu> {
             new ResourceLocation(InfinityNexusMiner.MOD_ID, "textures/gui/miner_gui.png");
 
     private EnergyInfoArea energyInfoArea;
+    private Button assembleButton;
 
     public MinerScreen(MinerMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
@@ -37,6 +44,15 @@ public class MinerScreen extends AbstractContainerScreen<MinerMenu> {
         this.inventoryLabelY = 10000;
         this.titleLabelY = 10000;
         assignEnergyInfoArea();
+
+        this.assembleButton = addRenderableWidget(
+                Button.builder(
+                                Component.literal(" "),
+                                this::handleExampleButton)
+                        .bounds(this.leftPos +152, this.topPos -10, 8, 9)
+                        .tooltip(Tooltip.create(Component.literal("Click a component on the outside of the Miner to assemble it")))
+                        .build());
+        this.assembleButton.setAlpha(0.0F);
     }
 
     private void assignEnergyInfoArea() {
@@ -58,7 +74,9 @@ public class MinerScreen extends AbstractContainerScreen<MinerMenu> {
         InfoArea.draw(pGuiGraphics);
         super.renderLabels(pGuiGraphics, pMouseX, pMouseY);
     }
+    private void handleExampleButton(Button button) {
 
+    }
     private void renderEnergyAreaTooltips(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, int x, int y) {
         if(isMouseAboveArea(pMouseX, pMouseY, x, y, 159,  6, 6, 62)) {
             pGuiGraphics.renderTooltip(this.font, energyInfoArea.getTooltips(), Optional.empty(), pMouseX - x, pMouseY - y);
@@ -214,7 +232,6 @@ public class MinerScreen extends AbstractContainerScreen<MinerMenu> {
             guiGraphics.drawString(this.font, "Mining: [OFF]", x + 196, index, 0XFF0000);
             guiGraphics.renderFakeItem(new ItemStack(Items.CRAFTING_TABLE), x + 178, index - 4);
         }
-
     }
 
     private boolean isMouseAboveArea(int pMouseX, int pMouseY, int x, int y, int offsetX, int offsetY, int width, int height) {
