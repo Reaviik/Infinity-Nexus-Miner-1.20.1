@@ -18,7 +18,8 @@
     "CCC"
   ],
   "result": {
-    "item": "infinity_nexus_miner:pink_light_crystal"
+    "item": "infinity_nexus_miner:pink_light_crystal",
+    "count": 6
   },
   "show_notification": true
 }

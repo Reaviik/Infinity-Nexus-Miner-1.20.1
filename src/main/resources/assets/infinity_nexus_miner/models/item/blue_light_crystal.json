@@ -1,6 +1,3 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "infinity_nexus_miner:item/blue_light_crystal"
-  }
+  "parent": "infinity_nexus_miner:block/blue_light_crystal"
 }

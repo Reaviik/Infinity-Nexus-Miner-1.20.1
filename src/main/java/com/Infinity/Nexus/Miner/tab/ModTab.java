@@ -44,6 +44,7 @@ public class ModTab {
                         pOutput.accept(new ItemStack(ModBlocksMiner.PINK_LIGHT_CRYSTAL.get()));
                         pOutput.accept(new ItemStack(ModBlocksMiner.RED_LIGHT_CRYSTAL.get()));
                         pOutput.accept(new ItemStack(ModBlocksMiner.ANCIENT_LIGHT_CRYSTAL.get()));
+                        pOutput.accept(new ItemStack(ModBlocksMiner.CHRISTMAS_LIGHT_CRYSTAL.get()));
                         //-------------------------//-------------------------//
                         //Crystal
                         pOutput.accept(new ItemStack(ModItemsMiner.AMBER_CRYSTAL.get()));
@@ -65,6 +66,7 @@ public class ModTab {
                         pOutput.accept(new ItemStack(ModBlocksMiner.PINK_CLEAR_GLASS.get()));
                         pOutput.accept(new ItemStack(ModBlocksMiner.RED_CLEAR_GLASS.get()));
                         pOutput.accept(new ItemStack(ModBlocksMiner.ANCIENT_CLEAR_GLASS.get()));
+                        pOutput.accept(new ItemStack(ModBlocksMiner.CHRISTMAS_CLEAR_GLASS.get()));
                         //-------------------------//-------------------------//
                         //Structural Block
                         //pOutput.accept(new ItemStack(ModBlocks.STRUCTURAL_BLOCK.get()));
