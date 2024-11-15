@@ -4,6 +4,8 @@ plugins {
     id 'maven-publish'
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+    //observables+spark
+    //id 'org.spongepowered.mixin' version '0.7.+'
 }
 
 version = mod_version
@@ -156,6 +158,12 @@ dependencies {
     // at runtime, use the full JEI jar for Forge
     runtimeOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}"))
 
+    //observables+spark
+    //implementation fg.deobf("curse.maven:construction-wand-399558:4684054")
+    //implementation fg.deobf("curse.maven:observable-509575:5080064")
+    //implementation fg.deobf("curse.maven:spark-361579:4738952")
+    //implementation fg.deobf("curse.maven:architectury-api-419699:4581905")
+
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
     // The group id is ignored when searching -- in this case, it is "blank"
@@ -180,7 +188,9 @@ dependencies {
     // - examplemod-api.jar
     // - examplemod-1.0.jar
     // - examplemod.jar
-    implementation fg.deobf('com.nexus:infinity_nexus_core:3.0.4-1.20.1')
+    implementation fg.deobf('com.nexus:infinity_nexus_core:3.0.6-1.20.1')
+    //observables+spark
+    //implementation fg.deobf("curse.maven:kotlin-for-forge-351264:5402061")
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

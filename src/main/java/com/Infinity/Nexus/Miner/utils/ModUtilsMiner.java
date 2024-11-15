@@ -19,6 +19,8 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ModUtilsMiner {
+
+    private static IFFakePlayer player;
     public static ItemStack getCrystalType(int value) {
         return switch (value) {
             case 2 -> new ItemStack(ModItemsMiner.MARINE_CRYSTAL.get());
@@ -47,7 +49,9 @@ public class ModUtilsMiner {
         if (!(stack.getItem() instanceof BlockItem)) {
             return null;
         }
-        IFFakePlayer player = new IFFakePlayer((ServerLevel) level);
+        if (player == null) {
+            player = new IFFakePlayer((ServerLevel) level);
+        }
         Block block = ((BlockItem) stack.getItem()).getBlock();
         AtomicReference<ItemStack> dropItem = new AtomicReference<ItemStack>(ItemStack.EMPTY);
 

@@ -14,7 +14,6 @@ import com.Infinity.Nexus.Miner.recipes.MinerRecipes;
 import com.Infinity.Nexus.Miner.screen.miner.MinerMenu;
 import com.Infinity.Nexus.Miner.utils.MinerTierStructure;
 import com.Infinity.Nexus.Miner.utils.ModUtilsMiner;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -57,8 +56,8 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MinerBlockEntity extends BlockEntity implements MenuProvider {
-    private CompoundTag customBlockData;
     float rotation = 0;
+    int process = 0;
     private final ItemStackHandler itemHandler = new ItemStackHandler(19) {
         @Override
         protected void onContentsChanged(int slot) {
@@ -71,7 +70,6 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
                 case 0, 1, 2, 3, 4, 5, 6, 7, 8 -> !ModUtils.isComponent(stack) || !ModUtils.isUpgrade(stack);
                 case 9, 10, 11, 12 -> ModUtils.isUpgrade(stack);
                 case 13 -> ModUtils.isComponent(stack);
-                //TODO
                 case 14 -> stack.getItem() == Items.ENCHANTED_BOOK || stack.isEnchanted();
                 case 15 -> stack.is(ModItems.LINKING_TOOL.get().asItem());
                 case 16 -> ForgeHooks.getBurnTime(stack, null) > 0;
@@ -119,9 +117,9 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
 
     protected final ContainerData data;
     private int progress = 0;
-    private int maxProgress = 5;
+    private int maxProgress = 130;
     private int verify = 0;
-    private int maxVerify = 15;
+    private int maxVerify = 300;
     private int structure = 0;
 
     private int hasRedstoneSignal = 0;
@@ -344,37 +342,38 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         if (pLevel.isClientSide) {
             return;
         }
+        if (!hasProgressFinished()) {
+            this.data.set(6, 0);
+            increaseCraftingProgress();
+            return;
+        }
+
+        this.data.set(6, 1);
+
         int machineLevel = getMachineLevel() - 1 <= 0 ? 0 : getMachineLevel() - 1;
+        int lit = pState.getValue(Miner.LIT);
         if (this.structure == 0) {
-            if(pState.getValue(Miner.LIT) != machineLevel) {
+            if(lit != machineLevel) {
                 pLevel.setBlock(pPos, pState.setValue(Miner.LIT, machineLevel), 3);
             }
         }
         if (isRedstonePowered(pPos)) {
             this.data.set(5, 1);
-            if(pState.getValue(Miner.LIT) != machineLevel) {
+            if(lit != machineLevel) {
                 pLevel.setBlock(pPos, pState.setValue(Miner.LIT, machineLevel), 3);
             }
             return;
         }
         this.data.set(5, 0);
 
-        if (!hasProgressFinished()) {
-            this.data.set(6, 0);
-            increaseCraftingProgress();
-            return;
-        }
-        this.data.set(6, 1);
-
         if (!hasEmptySlot()) {
             this.data.set(7, 0);
-            if(pState.getValue(Miner.LIT) != machineLevel) {
+            if(lit != machineLevel) {
                 pLevel.setBlock(pPos, pState.setValue(Miner.LIT, machineLevel), 3);
             }
             if(hasProgressFinished()){
                 insertItemOnInventory(ItemStack.EMPTY);
             }
-            notifyOwner(machineLevel, pLevel);
             return;
         }
         this.data.set(7, 1);
@@ -382,7 +381,7 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         resetProgress();
         if (!hasComponent()) {
             this.data.set(8, 0);
-            if(pState.getValue(Miner.LIT) != machineLevel) {
+            if(lit != machineLevel) {
                 pLevel.setBlock(pPos, pState.setValue(Miner.LIT, machineLevel), 3);
             }
             return;
@@ -393,7 +392,7 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         if (!hasEnoughEnergy(machineLevel)) {
             verifySolidFuel();
             this.data.set(9, 0);
-            if(pState.getValue(Miner.LIT) != machineLevel) {
+            if(lit != machineLevel) {
                 pLevel.setBlock(pPos, pState.setValue(Miner.LIT, machineLevel), 3);
             }
             return;
@@ -402,7 +401,7 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         if (hasRecipe(pPos, machineLevel)) {
             renderParticles(pPos);
             this.data.set(10, 1);
-            if(pState.getValue(Miner.LIT) != machineLevel + 9) {
+            if(lit != machineLevel + 9) {
                 pLevel.setBlock(pPos, pState.setValue(Miner.LIT, machineLevel + 9), 3);
             }
             craftItem(pPos, machineLevel);
@@ -421,19 +420,6 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         double z = pPos.getZ()+0.5;
         var level = (ServerLevel) this.getLevel();
         level.sendParticles(ParticleTypes.PORTAL, x, y, z, 12, 0, 0, 0, 0.1D);
-    }
-
-    private void notifyOwner(int machineLevel, Level pLevel) {
-        try {
-            if (this.customBlockData != null && this.customBlockData.getInt("ownerNotifyDelay") >= this.customBlockData.getInt("ownerNotifyMaxDelay")) {
-                Player player = pLevel.getPlayerByUUID(this.customBlockData.getUUID("ownerUUID"));
-                player.playNotifySound(SoundEvents.NOTE_BLOCK_GUITAR.get(), SoundSource.BLOCKS, 5.0F, 1.0F);
-                this.customBlockData.putInt("ownerNotifyDelay", 0);
-            }
-            this.customBlockData.putInt("ownerNotifyDelay", this.customBlockData.getInt("ownerNotifyDelay") + 1);
-        } catch (Exception e) {
-
-        }
     }
 
     private boolean hasEmptySlot() {
@@ -580,11 +566,13 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
                         BlockState blockState = level.getBlockState(blockPos);
                         ItemStack blockStack = new ItemStack(blockState.getBlock().asItem());
                         itemHandler.setStackInSlot(RECIPE_SLOT, blockStack);
-                        recipe = getCurrentRecipe();
-                        if (!recipe.isEmpty()) {
-                            if (blockState.isAir() || isOre(blockStack)) {
-                                ItemStack drop = ModUtilsMiner.getDrop(blockStack, level, blockPos, getPickaxe());
-                                drops.add(Objects.requireNonNullElse(drop, ItemStack.EMPTY));
+                        if(!itemHandler.getStackInSlot(RECIPE_SLOT).isEmpty()) {
+                            recipe = getCurrentRecipe();
+                            if (!recipe.isEmpty()) {
+                                if (blockState.isAir() || isOre(blockStack)) {
+                                    ItemStack drop = ModUtilsMiner.getDrop(blockStack, level, blockPos, getPickaxe());
+                                    drops.add(Objects.requireNonNullElse(drop, ItemStack.EMPTY));
+                                }
                             }
                         }
                     }
@@ -712,11 +700,11 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     private void setMaxProgress(int machineLevel) {
-        int duration = structure == 0 ? 5 : 120;
+        int duration = structure == 0 ? 20 : 120;
         int speed = ModUtils.getSpeed(itemHandler, UPGRADE_SLOTS);
 
         duration = duration / Math.max(((machineLevel+1) + speed), 1);
-        if(itemHandler.getStackInSlot(COMPONENT_SLOT). getItem() == ModItems.ANCESTRAL_COMPONENT.get() && speed == 16) {
+        if(itemHandler.getStackInSlot(COMPONENT_SLOT).getItem() == ModItems.ANCESTRAL_COMPONENT.get() && speed == 16) {
             maxProgress = 1;
         }else{
             maxProgress = Math.max(duration, 1);
@@ -760,11 +748,6 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
             }
         }
     }
-
-    public void setCustomBlockData(CompoundTag nbt) {
-        this.customBlockData = nbt;
-    }
-
     public void setMachineLevel(ItemStack itemStack, Player player) {
         SetMachineLevel.setMachineLevel(itemStack, player, this, COMPONENT_SLOT, this.itemHandler);
         makeStructure();

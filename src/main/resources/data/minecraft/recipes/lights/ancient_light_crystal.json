@@ -6,7 +6,7 @@
       "item": "minecraft:glass"
     },
     "B": {
-      "item": "infinity_nexus_miner:amber_crystal"
+      "item": "infinity_nexus_miner:termurium_crystal"
     },
     "C": {
       "item": "minecraft:quartz_slab"
@@ -18,7 +18,7 @@
     "CCC"
   ],
   "result": {
-    "item": "infinity_nexus_miner:yellow_light_crystal"
+    "item": "infinity_nexus_miner:ancient_light_crystal"
   },
   "show_notification": true
 }

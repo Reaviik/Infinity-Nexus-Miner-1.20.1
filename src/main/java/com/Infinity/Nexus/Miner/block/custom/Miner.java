@@ -121,24 +121,6 @@ public class Miner extends BaseEntityBlock {
                 (pLevel1, pPos, pState1, pBlockEntity) -> pBlockEntity.tick(pLevel1, pPos, pState1));
     }
     @Override
-    public void setPlacedBy(Level pLevel, BlockPos pPos, BlockState pState, @Nullable LivingEntity pPlacer, ItemStack pStack) {
-        Player player = pPlacer instanceof Player ? (Player) pPlacer : null;
-        if (player != null && pLevel.isClientSide()) {
-            MinerBlockEntity miner = ((MinerBlockEntity) pLevel.getBlockEntity(pPos));
-
-            // Criar um novo NBT e adicionar o UUID do jogador
-            CompoundTag nbt = new CompoundTag();
-            nbt.putUUID("ownerUUID", player.getUUID());
-            nbt.putInt("ownerNotifyDelay", 0);
-            nbt.putInt("ownerNotifyMaxDelay", 600);
-
-            // Definir a NBT do bloco
-            miner.setCustomBlockData(nbt);
-        }
-
-        super.setPlacedBy(pLevel, pPos, pState, pPlacer, pStack);
-    }
-    @Override
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> components, TooltipFlag flag) {
             if (Screen.hasShiftDown()) {
                 components.add(Component.translatable("item.infinity_nexus_miner.miner_description"));
