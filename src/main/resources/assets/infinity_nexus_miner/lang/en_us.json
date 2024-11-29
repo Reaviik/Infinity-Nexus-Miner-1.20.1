@@ -53,6 +53,6 @@
   "tooltip.infinity_nexus_miner.linking_slot_tooltip": "Linking Tool Slot",
   "tooltip.infinity_nexus_miner.fuel_slot_tooltip": "Fuel Slot",
 
-  "tooltip.infinity_nexus_miner.christmas_clear_glass": "RGB Clear Glass",
-  "tooltip.infinity_nexus_miner.christmas_light_crystal": "Christmas Light Crystal"
+  "block.infinity_nexus_miner.christmas_clear_glass": "RGB Clear Glass",
+  "block.infinity_nexus_miner.christmas_light_crystal": "Christmas Light Crystal"
 }

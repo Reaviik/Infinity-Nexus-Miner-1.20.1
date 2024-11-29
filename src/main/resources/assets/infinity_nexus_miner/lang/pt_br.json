@@ -53,6 +53,6 @@
   "tooltip.infinity_nexus_miner.linking_slot_tooltip": "Slot de Linkagem",
   "tooltip.infinity_nexus_miner.fuel_slot_tooltip": "Slot de Combustível",
 
-  "tooltip.infinity_nexus_miner.christmas_clear_glass": "Vidro Liso RGB",
-  "tooltip.infinity_nexus_miner.christmas_light_crystal": "Cristal Luminoso RGB"
+  "block.infinity_nexus_miner.christmas_clear_glass": "Vidro Liso RGB",
+  "block.infinity_nexus_miner.christmas_light_crystal": "Cristal Luminoso RGB"
 }
