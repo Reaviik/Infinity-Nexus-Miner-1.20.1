@@ -7,6 +7,8 @@ import com.Infinity.Nexus.Core.renderer.RenderScreenTooltips;
 import com.Infinity.Nexus.Core.utils.MouseUtil;
 import com.Infinity.Nexus.Miner.InfinityNexusMiner;
 import com.Infinity.Nexus.Miner.block.ModBlocksMiner;
+import com.Infinity.Nexus.Miner.networking.ModMessages;
+import com.Infinity.Nexus.Miner.networking.packet.AssembleMinerC2SPacket;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.GuiGraphics;
@@ -42,13 +44,19 @@ public class MinerScreen extends AbstractContainerScreen<MinerMenu> {
         assignEnergyInfoArea();
 
         this.assembleButton = addRenderableWidget(
-                Button.builder(
+                        new net.minecraft.client.gui.components.Button.Builder(
                                 Component.literal(" "),
-                                this::handleExampleButton)
-                        .bounds(this.leftPos +152, this.topPos -10, 8, 9)
-                        .tooltip(Tooltip.create(Component.literal("Click a component on the outside of the Miner to assemble it")))
-                        .build());
+                                this::onAreaButtonClick)
+                                .tooltip(Tooltip.create(Component.translatable("gui.infinity_nexus_mod.miner.assemble")))
+                                .bounds(this.leftPos +151, this.topPos -10, 8, 9)
+                                .size(8, 9)
+                                .build()
+                );
         this.assembleButton.setAlpha(0.0F);
+    }
+    private void onAreaButtonClick(Button button) {
+        //button.setTooltip((Tooltip.create(Component.translatable((showArea ? "gui.infinity_nexus_mod.mob_crusher.hide_area" : "gui.infinity_nexus_mod.mob_crusher.show_area")))));
+        ModMessages.sendToServer(new AssembleMinerC2SPacket(menu.blockEntity.getBlockPos()));
     }
 
     private void assignEnergyInfoArea() {

@@ -188,7 +188,7 @@ dependencies {
     // - examplemod-api.jar
     // - examplemod-1.0.jar
     // - examplemod.jar
-    implementation fg.deobf('com.nexus:infinity_nexus_core:3.0.6-1.20.1')
+    implementation fg.deobf('com.nexus:infinity_nexus_core:3.0.7-1.20.1')
     //observables+spark
     //implementation fg.deobf("curse.maven:kotlin-for-forge-351264:5402061")
 }

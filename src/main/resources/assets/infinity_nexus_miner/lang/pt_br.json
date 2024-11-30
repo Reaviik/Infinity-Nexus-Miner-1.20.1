@@ -3,7 +3,7 @@
   "tooltip.infinity_nexus.pressShift": "§bPressione §eShift §bpara ver mais informações",
 
   "block.infinity_nexus_miner.miner": "Mineradora",
-  "item.infinity_nexus_miner.miner_description": "§9Minerador Multibloco.\n§bPara montar a máquina de mineração, é necessário colocá-la acima do solo a uma altura entre §e5 §ba §e11 §bblocos dependendo do nível desejado e adicionar um componente para pré-visualizar a estrutura",
+  "item.infinity_nexus_miner.miner_description": "§5Mineradora Multibloco.\n§bDeve ser colocado na altura correta em relação ao solo, dependendo do nível do componente instalado.\n§9Click the \"A\" button in the upper right corner to assemble the structure.\n§fRedstone: 5° §a-> Estrutura de Madeira.\n§fBásico: 5° §a-> Estrutura de Pedra.\n§eReforçado: 7° §a-> Estrutura de Cobre.\n§eLógico: 7° §a-> Estrutura de Ferro.\n§cAvançado: 9° §a-> Estrutura de Ouro.\n§cRefinado: 9° §a-> Estrutura de Quartzo.\n§5Integral: 11° §a-> Estrutura de Diamante.\n§5Infinito: 11° §a-> Estrutura de Esmeralda.\n§8Ancestral: 11° §a-> Estrutura de Netherite.",
 
   "infinity_nexus_mod.jei_information": "§9Esta máquina precisa de um componente para funcionar.",
   "item.infinity_nexus_miner.crystal_description": "§9Este item é obtido atraves da mineradora tier",
@@ -54,5 +54,6 @@
   "tooltip.infinity_nexus_miner.fuel_slot_tooltip": "Slot de Combustível",
 
   "block.infinity_nexus_miner.christmas_clear_glass": "Vidro Liso RGB",
-  "block.infinity_nexus_miner.christmas_light_crystal": "Cristal Luminoso RGB"
+  "block.infinity_nexus_miner.christmas_light_crystal": "Cristal Luminoso RGB",
+  "gui.infinity_nexus_mod.miner.assemble": "Montar Estrutura da Mineradora"
 }

@@ -1,6 +1,7 @@
 package com.Infinity.Nexus.Miner.networking;
 
 import com.Infinity.Nexus.Miner.InfinityNexusMiner;
+import com.Infinity.Nexus.Miner.networking.packet.AssembleMinerC2SPacket;
 import com.Infinity.Nexus.Miner.networking.packet.EnergySyncS2CPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -27,6 +28,12 @@ public class ModMessages {
                 .decoder(EnergySyncS2CPacket::new)
                 .encoder(EnergySyncS2CPacket::toBytes)
                 .consumerMainThread(EnergySyncS2CPacket::handle)
+                .add();
+
+        net.messageBuilder(AssembleMinerC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(AssembleMinerC2SPacket::new)
+                .encoder(AssembleMinerC2SPacket::toBytes)
+                .consumerMainThread(AssembleMinerC2SPacket::handle)
                 .add();
     }
 

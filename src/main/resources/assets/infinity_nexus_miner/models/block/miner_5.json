@@ -2,7 +2,8 @@
   "credit": "Made with Blockbench",
   "textures": {
     "4": "minecraft:block/quartz_pillar",
-    "9": "infinity_nexus_miner:block/miner/miner_5"
+    "9": "infinity_nexus_miner:block/miner/miner_5",
+    "particle": "infinity_nexus_miner:block/miner/miner_5"
   },
   "elements": [
     {

@@ -57,7 +57,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MinerBlockEntity extends BlockEntity implements MenuProvider {
     float rotation = 0;
-    int process = 0;
     private final ItemStackHandler itemHandler = new ItemStackHandler(19) {
         @Override
         protected void onContentsChanged(int slot) {
@@ -407,7 +406,7 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
             craftItem(pPos, machineLevel);
             extractEnergy(this, machineLevel);
             verifySolidFuel();
-            ModUtils.ejectItemsWhePusher(pPos.above(),UPGRADE_SLOTS, UPGRADE_SLOTS, itemHandler, pLevel);
+            ModUtils.ejectItemsWhePusher(pPos.above(),UPGRADE_SLOTS, OUTPUT_SLOT, itemHandler, pLevel);
             setChanged(pLevel, pPos, pState);
         }
         this.data.set(10, 0);
@@ -733,11 +732,6 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         }
         MinerTierStructure.hasStructure(getMachineLevel(), this.getBlockPos(), this.getLevel(), this.itemHandler, true);
     }
-    public void resetVerify() {
-        this.data.set(2, this.data.get(3));
-        verify = maxVerify;
-        progress = maxProgress;
-    }
     private void verifySolidFuel(){
         ItemStack slotItem = itemHandler.getStackInSlot(FUEL_SLOT);
         int burnTime = ForgeHooks.getBurnTime(slotItem, null) * Config.miner_fuel_multiplier;
@@ -750,8 +744,8 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
     }
     public void setMachineLevel(ItemStack itemStack, Player player) {
         SetMachineLevel.setMachineLevel(itemStack, player, this, COMPONENT_SLOT, this.itemHandler);
-        makeStructure();
-        resetVerify();
+        progress = maxProgress;
+        setChanged();
     }
     public void setUpgradeLevel(ItemStack itemStack, Player player) {
         SetUpgradeLevel.setUpgradeLevel(itemStack, player, this, UPGRADE_SLOTS, this.itemHandler);

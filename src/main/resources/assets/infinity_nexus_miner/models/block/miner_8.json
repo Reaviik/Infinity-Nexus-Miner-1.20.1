@@ -2,7 +2,8 @@
   "credit": "Made with Blockbench",
   "textures": {
     "4": "minecraft:block/netherite_block",
-    "9": "infinity_nexus_miner:block/miner/miner_8"
+    "9": "infinity_nexus_miner:block/miner/miner_8",
+    "particle": "infinity_nexus_miner:block/miner/miner_8"
   },
   "elements": [
     {

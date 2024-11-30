@@ -2,7 +2,8 @@
   "credit": "Made with Blockbench",
   "textures": {
     "4": "minecraft:block/iron_block",
-    "9": "infinity_nexus_miner:block/miner/miner_3"
+    "9": "infinity_nexus_miner:block/miner/miner_3",
+    "particle": "infinity_nexus_miner:block/miner/miner_3"
   },
   "elements": [
     {
