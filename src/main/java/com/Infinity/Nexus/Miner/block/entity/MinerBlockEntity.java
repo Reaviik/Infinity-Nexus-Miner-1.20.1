@@ -61,6 +61,9 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();
+            if(slot == COMPONENT_SLOT){
+                verify = maxVerify;
+            }
         }
 
         @Override
@@ -78,6 +81,7 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
             };
         }
     };
+
     private static final int[] OUTPUT_SLOT = {0, 1, 2, 3, 4, 5, 6, 7, 8};
     private static final int[] UPGRADE_SLOTS = {9, 10, 11, 12};
     private static final int COMPONENT_SLOT = 13;
