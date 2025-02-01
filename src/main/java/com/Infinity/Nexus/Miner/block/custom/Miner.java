@@ -120,6 +120,17 @@ public class Miner extends BaseEntityBlock {
         return createTickerHelper(pBlockEntityType, ModBlockEntities.MINER_BE.get(),
                 (pLevel1, pPos, pState1, pBlockEntity) -> pBlockEntity.tick(pLevel1, pPos, pState1));
     }
+
+    @Override
+    public void setPlacedBy(Level pLevel, BlockPos pPos, BlockState pState, @Nullable LivingEntity pPlacer, ItemStack pStack) {
+        if (pPlacer instanceof Player) {
+            Player player = (Player) pPlacer;
+            MinerBlockEntity minerBlockEntity = (MinerBlockEntity) pLevel.getBlockEntity(pPos);
+            minerBlockEntity.setOwner(player);
+        }
+        super.setPlacedBy(pLevel, pPos, pState, pPlacer, pStack);
+    }
+
     @Override
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> components, TooltipFlag flag) {
             if (Screen.hasShiftDown()) {

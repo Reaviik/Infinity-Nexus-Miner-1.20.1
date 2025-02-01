@@ -1,0 +1,20 @@
+{
+  "type": "infinity_nexus_miner:mining",
+  "energy": 100,
+  "level": 6,
+  "fortune": false,
+  "ingredient": [
+    {
+      "tag": "forge:ores/cloggrum"
+    }
+  ],
+  "output": {
+    "item": "undergarden:raw_cloggrum"
+  },
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "undergarden"
+    }
+  ]
+}

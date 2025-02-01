@@ -14,12 +14,16 @@ import com.Infinity.Nexus.Miner.recipes.MinerRecipes;
 import com.Infinity.Nexus.Miner.screen.miner.MinerMenu;
 import com.Infinity.Nexus.Miner.utils.MinerTierStructure;
 import com.Infinity.Nexus.Miner.utils.ModUtilsMiner;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
+import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -137,6 +141,9 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
     private int linkz = 0;
     private int linkFace = 0;
 
+    private String owner;
+    private int delay = (20 * 60);
+
 
     public MinerBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(ModBlockEntities.MINER_BE.get(), pPos, pBlockState);
@@ -161,6 +168,8 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
                     case 12 -> MinerBlockEntity.this.linky;
                     case 13 -> MinerBlockEntity.this.linkz;
                     case 14 -> MinerBlockEntity.this.linkFace;
+
+                    case 15 -> MinerBlockEntity.this.owner == null ? 0 : 1;
 
                     default -> 0;
                 };
@@ -315,6 +324,8 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         pTag.putInt("miner.linkz", data.get(13));
         pTag.putInt("miner.linkFace", data.get(14));
 
+        pTag.putString("owner", owner == null ? "" : owner);
+
         super.saveAdditional(pTag);
     }
 
@@ -338,6 +349,12 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         linky = pTag.getInt("miner.linky");
         linkz = pTag.getInt("miner.linkz");
         linkFace = pTag.getInt("miner.linkFace");
+
+        if (pTag.getString("owner").equals("")) {
+            owner = null;
+        } else {
+            owner = pTag.getString("owner");
+        }
     }
 
 
@@ -377,6 +394,7 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
             if(hasProgressFinished()){
                 insertItemOnInventory(ItemStack.EMPTY);
             }
+            notifyOwner(pPos);
             return;
         }
         this.data.set(7, 1);
@@ -416,6 +434,32 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         this.data.set(10, 0);
 
     }
+
+    private void notifyOwner(BlockPos pPos) {
+        if (delay <= 0) {
+            Player player = this.level.getPlayerByUUID(UUID.fromString(this.owner));
+            if (player != null) {
+                // Obtendo as coordenadas do bloco
+                int x = pPos.getX();
+                int y = pPos.getY();
+                int z = pPos.getZ();
+
+                // Criando a mensagem com um clique executável
+                MutableComponent message = Component.translatable("chat.infinity_nexus_miner.miner_is_full")
+                        .append(" [TP]")
+                       .withStyle(style -> style
+                          .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/minecraft:tp " + player.getName().getString() + " " + (x+0.5) + " " + (y+1) + " " + (z+0.5)))
+                       );
+
+                player.sendSystemMessage(message);
+                delay = (20 * 60) * 10;
+            }
+        } else {
+            delay--;
+        }
+    }
+
+
 
     private void renderParticles(BlockPos pPos) {
         double x = pPos.getX()+0.5;
@@ -505,10 +549,7 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         ItemStack component = this.itemHandler.getStackInSlot(COMPONENT_SLOT);
         ItemStack output = getOutputItem(pos, machineLevel);
         Random random = new Random();
-        int random1 = random.nextInt(100 * Math.max(machineLevel, 1));
-        if(Config.miner_mining_cost_component_durability){
-            ModUtils.useComponent(component, level, this.getBlockPos());
-        }
+        int random1 = random.nextInt(Config.crystal_chance * Math.max(machineLevel, 1));
 
         if(random1 <= machineLevel+1){
             for(int i = 1; i <= random1; i++){
@@ -517,6 +558,11 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         }
 
         insertItemOnInventory(output);
+
+        if(Config.miner_mining_cost_component_durability){
+            ModUtils.useComponent(component, level, this.getBlockPos());
+        }
+
         if(ModUtils.getMuffler(itemHandler, UPGRADE_SLOTS) <= 0) {
             level.playSound(null, this.getBlockPos(), SoundEvents.BEE_HURT, SoundSource.BLOCKS, 0.1f, 1.0f);
         }
@@ -703,7 +749,7 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     private void setMaxProgress(int machineLevel) {
-        int duration = structure == 0 ? 20 : 120;
+        int duration = structure == 0 ? 20 : Config.max_progress;
         int speed = ModUtils.getSpeed(itemHandler, UPGRADE_SLOTS);
 
         duration = duration / Math.max(((machineLevel+1) + speed), 1);
@@ -753,6 +799,11 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
     }
     public void setUpgradeLevel(ItemStack itemStack, Player player) {
         SetUpgradeLevel.setUpgradeLevel(itemStack, player, this, UPGRADE_SLOTS, this.itemHandler);
+        setChanged();
+    }
+
+    public void setOwner(Player player) {
+        owner = player.getStringUUID();
         setChanged();
     }
 

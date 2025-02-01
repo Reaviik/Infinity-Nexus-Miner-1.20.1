@@ -55,5 +55,6 @@
 
   "block.infinity_nexus_miner.christmas_clear_glass": "Vidro Liso RGB",
   "block.infinity_nexus_miner.christmas_light_crystal": "Cristal Luminoso RGB",
-  "gui.infinity_nexus_mod.miner.assemble": "Montar Estrutura da Mineradora"
+  "gui.infinity_nexus_mod.miner.assemble": "Montar Estrutura da Mineradora",
+  "chat.infinity_nexus_miner.miner_is_full": "§cInfinity Nexus Miner: §fSua mineradora esta cheia!"
 }

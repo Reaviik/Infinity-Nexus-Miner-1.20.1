@@ -44,6 +44,8 @@ public class Config
 
     private static final ForgeConfigSpec.IntValue ENERGY_PER_OPERATION_BASE  = BUILDER.comment("Define a quantidade de energia que a Mineradora consumirá por operação (a base para os calculos)").defineInRange("miner_energy_per_operation", 100, 1, Integer.MAX_VALUE);
     private static final ForgeConfigSpec.BooleanValue CAN_BE_USER_SILK_TOUCH  = BUILDER.comment("Define a se a Mineradora pode ou não pegar minerios com Toque Suave").define("miner_can_be_use_silk_touch", false);
+    private static final ForgeConfigSpec.IntValue MAX_PROGRESS = BUILDER.comment("Define o delay maximo de progresso da Mineradora").defineInRange("max_progress", 120, 1, Integer.MAX_VALUE);
+    private static final ForgeConfigSpec.IntValue CRYSTAL_CHANCE = BUILDER.comment("Fator de chance de um cristal ser gerado. Padrão = 100.").defineInRange("crystal_chance", 100, 1, Integer.MAX_VALUE);
     //Builda o Arquivo
     public static final ForgeConfigSpec SPEC = BUILDER.build();
 
@@ -60,6 +62,9 @@ public class Config
 
     public static int energy_per_operation_base;
     public static boolean miner_can_be_use_silk_touch;
+
+    public static int max_progress;
+    public static int crystal_chance;
 
 
     @SubscribeEvent
@@ -80,6 +85,9 @@ public class Config
 
         energy_per_operation_base = ENERGY_PER_OPERATION_BASE.get();
         miner_can_be_use_silk_touch = CAN_BE_USER_SILK_TOUCH.get();
+
+        max_progress = MAX_PROGRESS.get();
+        crystal_chance = CRYSTAL_CHANCE.get();
     }
 
     public static void reloadConfig(CommandSourceStack source) {
@@ -112,5 +120,10 @@ public class Config
         source.sendSystemMessage(Component.literal("§c"+ miner_can_be_use_silk_touch +" §cMiner Can Be Use Silk Touch unloaded!"));
         miner_can_be_use_silk_touch = CAN_BE_USER_SILK_TOUCH.get();
         source.sendSystemMessage(Component.literal("§a"+ miner_can_be_use_silk_touch +" §bMiner Can Be Use Silk Touch loaded!"));
+
+        source.sendSystemMessage(Component.literal("§eReloading: §bMax Progress..."));
+        source.sendSystemMessage(Component.literal("§c"+ max_progress +" §cMax Progress unloaded!"));
+        max_progress = MAX_PROGRESS.get();
+        source.sendSystemMessage(Component.literal("§a"+ max_progress +" §bMax Progress loaded!"));
     }
 }

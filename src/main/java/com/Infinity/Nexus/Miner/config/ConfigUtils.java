@@ -1,6 +1,7 @@
 package com.Infinity.Nexus.Miner.config;
 
 import com.Infinity.Nexus.Core.items.ModItems;
+import com.Infinity.Nexus.Miner.utils.ModTags;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -22,9 +23,7 @@ public class ConfigUtils {
 
 
     public static boolean isStructure(Item item) {
-        return Config.list_of_structures.stream()
-                .map(structure -> ForgeRegistries.ITEMS.getValue(new ResourceLocation(structure)))
-                .anyMatch(structureItem -> structureItem == item);
+        return item.getDefaultInstance().is(ModTags.Items.MINER_STRUCTURE);
     }
 
     public static ItemStack getComponentByLevel(int level) {

@@ -55,5 +55,6 @@
 
   "block.infinity_nexus_miner.christmas_clear_glass": "RGB Clear Glass",
   "block.infinity_nexus_miner.christmas_light_crystal": "Christmas Light Crystal",
-  "gui.infinity_nexus_mod.miner.assemble": "Assemble Miner Structure"
+  "gui.infinity_nexus_mod.miner.assemble": "Assemble Miner Structure",
+  "chat.infinity_nexus_miner.miner_is_full": "§cInfinity Nexus Miner: §fYour miner is Full!"
 }

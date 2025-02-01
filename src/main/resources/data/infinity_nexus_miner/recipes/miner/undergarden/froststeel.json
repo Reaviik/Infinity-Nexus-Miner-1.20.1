@@ -1,0 +1,20 @@
+{
+  "type": "infinity_nexus_miner:mining",
+  "energy": 100,
+  "level": 6,
+  "fortune": false,
+  "ingredient": [
+    {
+      "tag": "forge:ores/froststeel"
+    }
+  ],
+  "output": {
+    "item": "undergarden:raw_froststeel"
+  },
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "undergarden"
+    }
+  ]
+}

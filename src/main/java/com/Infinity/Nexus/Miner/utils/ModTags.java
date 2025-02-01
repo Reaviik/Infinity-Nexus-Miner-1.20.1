@@ -40,6 +40,7 @@ public class ModTags {
         public static final TagKey<Item> UP_8 = tag("up_8");
         public static final TagKey<Item> UP_9 = tag("up_9");
 
+        public static final TagKey<Item> MINER_STRUCTURE = tag("structures");
         public static final TagKey<Item> MINER_STRUCTURE_0 = tag("machine_tier_0");
         public static final TagKey<Item> MINER_STRUCTURE_1 = tag("machine_tier_1");
         public static final TagKey<Item> MINER_STRUCTURE_2 = tag("machine_tier_2");
