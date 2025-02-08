@@ -21,6 +21,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 public class LightCrystal extends ButtonBlock {
+
     protected static final VoxelShape CEILING_AABB_X =         Block.box(6.0D, 12.0D, 6.0D, 10.0D, 16.0D, 10.0D);
     protected static final VoxelShape PRESSED_CEILING_AABB_X = Block.box(6.0D, 12.0D, 6.0D, 10.0D, 16.0D, 10.0D);
     protected static final VoxelShape CEILING_AABB_Z =         Block.box(6.0D, 12.0D, 6.0D, 10.0D, 16.0D, 10.0D);

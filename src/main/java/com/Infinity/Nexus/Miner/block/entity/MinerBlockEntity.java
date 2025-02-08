@@ -27,6 +27,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -444,20 +445,29 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
                 int y = pPos.getY();
                 int z = pPos.getZ();
 
+                // Obtendo a dimensão do bloco
+                ResourceKey<Level> blockDimension = this.level.dimension();
+
+                // Criando a string da dimensão
+                String dimensionName = blockDimension.location().toString(); // Exemplo: "minecraft:overworld"
+
                 // Criando a mensagem com um clique executável
                 MutableComponent message = Component.translatable("chat.infinity_nexus_miner.miner_is_full")
                         .append(" [TP]")
-                       .withStyle(style -> style
-                          .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/minecraft:tp " + player.getName().getString() + " " + (x+0.5) + " " + (y+1) + " " + (z+0.5)))
-                       );
+                        .withStyle(style -> style
+                                .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
+                                        "/infinitynexusminer minertp " + player.getName().getString() + " '" + dimensionName + "' " + (x + 0.5) + " " + (y + 1) + " " + (z + 0.5))
+                                )
+                        );
 
                 player.sendSystemMessage(message);
-                delay = (20 * 60) * 10;
+                delay = (20 * 60) * 10; // Resetando o delay
             }
         } else {
             delay--;
         }
     }
+
 
 
 
