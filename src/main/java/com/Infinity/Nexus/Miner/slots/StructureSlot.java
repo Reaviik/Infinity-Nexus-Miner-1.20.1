@@ -1,6 +1,7 @@
 package com.Infinity.Nexus.Miner.slots;
 
 import com.Infinity.Nexus.Miner.config.ConfigUtils;
+import com.Infinity.Nexus.Miner.utils.ModTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;

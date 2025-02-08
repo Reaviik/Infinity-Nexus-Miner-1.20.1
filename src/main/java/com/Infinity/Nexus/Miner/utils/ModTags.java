@@ -20,6 +20,8 @@ public class ModTags {
         public static final TagKey<Block> MINER_STRUCTURE_6 = tag("machine_tier_6");
         public static final TagKey<Block> MINER_STRUCTURE_7 = tag("machine_tier_7");
 
+        public static final TagKey<Block> MINER_STRUCTURE = tag("structure");
+
 
         private static TagKey<Block> tag(String name) {
             return BlockTags.create(new ResourceLocation(InfinityNexusMiner.MOD_ID, name));
@@ -40,7 +42,6 @@ public class ModTags {
         public static final TagKey<Item> UP_8 = tag("up_8");
         public static final TagKey<Item> UP_9 = tag("up_9");
 
-        public static final TagKey<Item> MINER_STRUCTURE = tag("structures");
         public static final TagKey<Item> MINER_STRUCTURE_0 = tag("machine_tier_0");
         public static final TagKey<Item> MINER_STRUCTURE_1 = tag("machine_tier_1");
         public static final TagKey<Item> MINER_STRUCTURE_2 = tag("machine_tier_2");
@@ -49,6 +50,8 @@ public class ModTags {
         public static final TagKey<Item> MINER_STRUCTURE_5 = tag("machine_tier_5");
         public static final TagKey<Item> MINER_STRUCTURE_6 = tag("machine_tier_6");
         public static final TagKey<Item> MINER_STRUCTURE_7 = tag("machine_tier_7");
+
+        public static final TagKey<Item> MINER_STRUCTURE = tag("structure");
 
 
         private static TagKey<Item> tag(String name) {

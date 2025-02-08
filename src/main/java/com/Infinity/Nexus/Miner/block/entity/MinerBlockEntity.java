@@ -13,6 +13,7 @@ import com.Infinity.Nexus.Miner.config.ConfigUtils;
 import com.Infinity.Nexus.Miner.recipes.MinerRecipes;
 import com.Infinity.Nexus.Miner.screen.miner.MinerMenu;
 import com.Infinity.Nexus.Miner.utils.MinerTierStructure;
+import com.Infinity.Nexus.Miner.utils.ModTags;
 import com.Infinity.Nexus.Miner.utils.ModUtilsMiner;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.components.ChatComponent;

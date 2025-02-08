@@ -3,6 +3,7 @@ package com.Infinity.Nexus.Miner.block.entity.wrappedHandlerMap;
 import com.Infinity.Nexus.Core.items.ModItems;
 import com.Infinity.Nexus.Core.utils.ModUtils;
 import com.Infinity.Nexus.Miner.config.ConfigUtils;
+import com.Infinity.Nexus.Miner.utils.ModTags;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
