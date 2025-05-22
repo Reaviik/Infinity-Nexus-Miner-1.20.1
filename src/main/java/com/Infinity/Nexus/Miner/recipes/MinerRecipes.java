@@ -43,9 +43,6 @@ public class MinerRecipes implements Recipe<SimpleContainer> {
         int componentSlot = MinerBlockEntity.getComponentSlot();
         ItemStack stack = pContainer.getItem(componentSlot);
         boolean matche = (ModUtils.getComponentLevel(stack) >= level) && inputItems.get(0).test(pContainer.getItem(MinerBlockEntity.getRecipeSlot()));
-        //if(matche) {
-        //   System.out.println(ModUtils.getComponentLevel(stack) +" : "+ level);
-        //}
         return matche;
     }
 

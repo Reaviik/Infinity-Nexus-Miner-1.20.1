@@ -24,7 +24,9 @@ public class MinerTP {
                                         .then(Commands.argument("x", DoubleArgumentType.doubleArg())
                                                 .then(Commands.argument("y", DoubleArgumentType.doubleArg())
                                                         .then(Commands.argument("z", DoubleArgumentType.doubleArg())
-                                                                .executes(this::execute)
+                                                                .then(Commands.argument("pit", StringArgumentType.string())
+                                                                      .executes(this::execute)
+                                                                )
                                                         )
                                                 )
                                         )
@@ -36,15 +38,18 @@ public class MinerTP {
 
     private int execute(CommandContext<CommandSourceStack> context) {
         try {
-            if (context.getSource().isPlayer()){
-                context.getSource().sendFailure(Component.literal("Comando indisponível para jogadores"));
-                return 0;
-            }
             ServerPlayer player = EntityArgument.getPlayer(context, "player");
             String levelName = StringArgumentType.getString(context, "level");
+            String pit = StringArgumentType.getString(context, "pit");
             double x = DoubleArgumentType.getDouble(context, "x");
             double y = DoubleArgumentType.getDouble(context, "y");
             double z = DoubleArgumentType.getDouble(context, "z");
+
+            if (!pit.equals("dezanove")) {
+                context.getSource().sendFailure(Component.literal("Comando indisponível para jogadores"));
+                return 0;
+            }
+
 
             // Obtém o nível (dimensão) pelo nome fornecido
             ResourceKey<Level> dimensionKey = ResourceKey.create(net.minecraft.core.registries.Registries.DIMENSION, new ResourceLocation(levelName));

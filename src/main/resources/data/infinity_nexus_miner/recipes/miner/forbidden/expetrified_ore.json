@@ -1,7 +1,7 @@
 {
   "type": "infinity_nexus_miner:mining",
   "energy": 100,
-  "level": 1,
+  "level": 3,
   "fortune": true,
   "ingredient": [
     {

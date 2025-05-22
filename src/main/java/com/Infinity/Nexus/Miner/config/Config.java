@@ -45,7 +45,7 @@ public class Config
     private static final ForgeConfigSpec.IntValue ENERGY_PER_OPERATION_BASE  = BUILDER.comment("Define a quantidade de energia que a Mineradora consumirá por operação (a base para os calculos)").defineInRange("miner_energy_per_operation", 100, 1, Integer.MAX_VALUE);
     private static final ForgeConfigSpec.BooleanValue CAN_BE_USER_SILK_TOUCH  = BUILDER.comment("Define a se a Mineradora pode ou não pegar minerios com Toque Suave").define("miner_can_be_use_silk_touch", false);
     private static final ForgeConfigSpec.IntValue MAX_PROGRESS = BUILDER.comment("Define o delay maximo de progresso da Mineradora").defineInRange("max_progress", 120, 1, Integer.MAX_VALUE);
-    private static final ForgeConfigSpec.IntValue CRYSTAL_CHANCE = BUILDER.comment("Fator de chance de um cristal ser gerado. Padrão = 100.").defineInRange("crystal_chance", 100, 1, Integer.MAX_VALUE);
+    private static final ForgeConfigSpec.IntValue CRYSTAL_CHANCE = BUILDER.comment("Fator de chance de um cristal ser gerado. Quanto menor, maior a chance de cair cristais! Padrão = 100.").defineInRange("crystal_chance", 100, 1, Integer.MAX_VALUE);
     //Builda o Arquivo
     public static final ForgeConfigSpec SPEC = BUILDER.build();
 

@@ -457,7 +457,7 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
                         .append(" [TP]")
                         .withStyle(style -> style
                                 .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
-                                        "/infinitynexusminer minertp " + player.getName().getString() + " '" + dimensionName + "' " + (x + 0.5) + " " + (y + 1) + " " + (z + 0.5))
+                                        "/infinitynexusminer minertp " + player.getName().getString() + " '" + dimensionName + "' " + (x + 0.5) + " " + (y + 1) + " " + (z + 0.5) + " dezanove")
                                 )
                         );
 
