@@ -1,0 +1,17 @@
+{
+  "type": "infinity_nexus_miner:mining",
+  "energy": 100,
+  "level": {
+    "tag": "infinity_nexus_core:up_8"
+  },
+  "fortune": false,
+  "ingredient": [
+    {
+      "item": "minecraft:ancient_debris"
+    }
+  ],
+  "output": {
+    "id": "minecraft:netherite_scrap",
+    "count": 1
+  }
+}
