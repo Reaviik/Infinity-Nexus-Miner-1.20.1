@@ -1,0 +1,16 @@
+{
+  "type": "infinity_nexus_miner:mining",
+  "energy": 100,
+  "level": "#infinity_nexus_core:up_6",
+  "fortune": true,
+  "ingredient": "forbidden_arcanus:stella_arcanum",
+  "output": {
+    "id": "forbidden_arcanus:stellarite_piece"
+  },
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "forbidden_arcanus"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": "infinity_nexus_miner:citrium_crystal"
+  },
+  "pattern": [
+    "AAA",
+    "AAA",
+    "AAA"
+  ],
+  "result": {
+    "id": "infinity_nexus_miner:orange_crystal_block"
+  },
+  "show_notification": true
+}

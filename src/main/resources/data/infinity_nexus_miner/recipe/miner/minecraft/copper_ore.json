@@ -1,0 +1,10 @@
+{
+  "type": "infinity_nexus_miner:mining",
+  "energy": 100,
+  "level": "#infinity_nexus_core:up_1",
+  "fortune": true,
+  "ingredient": "#c:ores/copper",
+  "output": {
+    "id": "minecraft:raw_copper"
+  }
+}

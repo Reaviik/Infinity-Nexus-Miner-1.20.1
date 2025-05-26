@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": "minecraft:glass",
+    "B": "minecraft:amethyst_shard",
+    "C": "minecraft:quartz_slab"
+  },
+  "pattern": [
+    "AAA",
+    "ABA",
+    "CCC"
+  ],
+  "result": {
+    "id": "infinity_nexus_miner:white_light_crystal"
+  },
+  "show_notification": true
+}

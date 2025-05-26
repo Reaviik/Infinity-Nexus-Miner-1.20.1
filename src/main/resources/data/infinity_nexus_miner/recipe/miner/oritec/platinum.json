@@ -1,0 +1,16 @@
+{
+  "type": "infinity_nexus_miner:mining",
+  "energy": 100,
+  "fortune": true,
+  "output": {
+    "id": "oritech:raw_platinum"
+  },
+  "level": "#infinity_nexus_core:up_2",
+  "ingredient": "#c:ores/platinum",
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "mekanism"
+    }
+  ]
+}

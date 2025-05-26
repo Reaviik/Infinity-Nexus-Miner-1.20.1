@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": "infinity_nexus_miner:termurium_crystal"
+  },
+  "pattern": [
+    "AAA",
+    "AAA",
+    "AAA"
+  ],
+  "result": {
+    "id": "infinity_nexus_miner:ancient_crystal_block"
+  },
+  "show_notification": true
+}

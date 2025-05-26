@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": "minecraft:white_wool",
+    "B": "minecraft:redstone",
+    "C": "minecraft:iron_ingot"
+  },
+  "pattern": [
+    "AAA",
+    "BCB",
+    "AAA"
+  ],
+  "result": {
+    "id": "infinity_nexus_core:muffler_upgrade"
+  },
+  "show_notification": true
+}

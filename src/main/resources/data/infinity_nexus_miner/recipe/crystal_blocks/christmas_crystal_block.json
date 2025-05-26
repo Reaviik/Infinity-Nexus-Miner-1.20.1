@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": "minecraft:amethyst_shard",
+    "B": "infinity_nexus_miner:amber_crystal",
+    "C": "infinity_nexus_miner:marine_crystal",
+    "D": "infinity_nexus_miner:citrium_crystal",
+    "E": "infinity_nexus_miner:rubium_crystal",
+    "F": "infinity_nexus_miner:demetrium_crystal",
+    "G": "infinity_nexus_miner:agate_crystal",
+    "H": "infinity_nexus_miner:darium_crystal",
+    "I": "infinity_nexus_miner:termurium_crystal"
+  },
+  "pattern": [
+    "ABC",
+    "DEF",
+    "GHI"
+  ],
+  "result": {
+    "id": "infinity_nexus_miner:christmas_crystal_block"
+  },
+  "show_notification": true
+}

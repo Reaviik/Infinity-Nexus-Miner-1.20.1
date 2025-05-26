@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": "minecraft:quartz",
+    "B": "minecraft:redstone",
+    "C": "minecraft:blaze_rod"
+  },
+  "pattern": [
+    "AAA",
+    "BCB",
+    "AAA"
+  ],
+  "result": {
+    "id": "infinity_nexus_core:strength_upgrade"
+  },
+  "show_notification": true
+}

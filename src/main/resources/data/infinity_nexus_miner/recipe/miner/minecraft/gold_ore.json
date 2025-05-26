@@ -1,0 +1,10 @@
+{
+  "type": "infinity_nexus_miner:mining",
+  "energy": 100,
+  "level": "#infinity_nexus_core:up_4",
+  "fortune": true,
+  "ingredient": "#c:ores/gold",
+  "output": {
+    "id": "minecraft:raw_gold"
+  }
+}

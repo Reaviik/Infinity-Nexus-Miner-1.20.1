@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": "#c:glass_blocks",
+    "B": "infinity_nexus_miner:rubium_crystal"
+  },
+  "pattern": [
+    "AAA",
+    "ABA",
+    "AAA"
+  ],
+  "result": {
+    "id": "infinity_nexus_miner:green_clear_glass",
+    "count": 8
+  },
+  "show_notification": true
+}

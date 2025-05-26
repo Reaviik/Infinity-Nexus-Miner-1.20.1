@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": "minecraft:netherite_pickaxe",
+    "B": "minecraft:barrel",
+    "C": "minecraft:ender_pearl",
+    "D": "infinity_nexus_miner:wood_structure",
+    "E": "minecraft:copper_block"
+  },
+  "pattern": [
+    "ABA",
+    "CDC",
+    "EEE"
+  ],
+  "result": {
+    "id": "infinity_nexus_miner:miner"
+  },
+  "show_notification": true
+}

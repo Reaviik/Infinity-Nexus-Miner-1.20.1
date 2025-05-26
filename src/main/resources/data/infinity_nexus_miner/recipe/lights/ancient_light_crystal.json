@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": "minecraft:glass",
+    "B": "infinity_nexus_miner:termurium_crystal",
+    "C": "minecraft:quartz_slab"
+  },
+  "pattern": [
+    "AAA",
+    "ABA",
+    "CCC"
+  ],
+  "result": {
+    "id": "infinity_nexus_miner:ancient_light_crystal"
+  },
+  "show_notification": true
+}

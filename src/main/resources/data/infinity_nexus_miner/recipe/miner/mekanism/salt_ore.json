@@ -1,0 +1,16 @@
+{
+  "type": "infinity_nexus_miner:mining",
+  "energy": 100,
+  "fortune": true,
+  "output": {
+    "id": "mekanism:salt"
+  },
+  "level": "#infinity_nexus_core:up_4",
+  "ingredient": "#c:ores/salt",
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "mekanism"
+    }
+  ]
+}
