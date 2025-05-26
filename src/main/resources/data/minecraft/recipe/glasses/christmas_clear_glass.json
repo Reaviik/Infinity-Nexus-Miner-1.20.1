@@ -1,0 +1,42 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "infinity_nexus_miner:white_clear_glass"
+    },
+    "B": {
+      "item": "infinity_nexus_miner:yellow_clear_glass"
+    },
+    "C": {
+      "item": "infinity_nexus_miner:blue_clear_glass"
+    },
+    "D": {
+      "item": "infinity_nexus_miner:orange_clear_glass"
+    },
+    "E": {
+      "item": "infinity_nexus_miner:green_clear_glass"
+    },
+    "F": {
+      "item": "infinity_nexus_miner:purple_clear_glass"
+    },
+    "G": {
+      "item": "infinity_nexus_miner:pink_clear_glass"
+    },
+    "H": {
+      "item": "infinity_nexus_miner:red_clear_glass"
+    },
+    "I": {
+      "item": "infinity_nexus_miner:ancient_clear_glass"
+    }
+  },
+  "pattern": [
+    "ABC",
+    "DEF",
+    "GHI"
+  ],
+  "result": {
+    "id": "infinity_nexus_miner:christmas_clear_glass"
+  },
+  "show_notification": true
+}
