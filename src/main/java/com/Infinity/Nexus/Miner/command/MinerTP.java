@@ -1,5 +1,7 @@
 package com.Infinity.Nexus.Miner.command;
 
+import com.Infinity.Nexus.Core.utils.GetResourceLocation;
+import com.Infinity.Nexus.Miner.InfinityNexusMiner;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -7,13 +9,14 @@ import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
+
+import java.util.Set;
 
 public class MinerTP {
     public MinerTP(CommandDispatcher<CommandSourceStack> dispatcher) {
@@ -52,20 +55,21 @@ public class MinerTP {
 
 
             // Obtém o nível (dimensão) pelo nome fornecido
-            ResourceKey<Level> dimensionKey = ResourceKey.create(net.minecraft.core.registries.Registries.DIMENSION, new ResourceLocation(levelName));
+            ResourceKey<Level> dimensionKey = ResourceKey.create(Registries.DIMENSION, GetResourceLocation.parse(levelName));
             ServerLevel targetWorld = player.getServer().getLevel(dimensionKey);
 
             if (targetWorld == null) {
                 context.getSource().sendFailure(Component.literal("Dimensão inválida: " + levelName));
                 return 0;
             }
-            player.teleportTo(targetWorld, x, y, z, player.getYRot(), player.getXRot());
+            player.teleportTo(targetWorld, x, y, z, Set.of(), player.getYRot(), player.getXRot());
 
 
-            context.getSource().sendSuccess(() -> Component.literal("Teleportado com sucesso para a mineradora!"), true);
+            context.getSource().sendSuccess(() -> Component.literal(InfinityNexusMiner.MESSAGE + "Teleportado com sucesso para a mineradora!"), true);
             return 1;
         } catch (Exception e) {
-            context.getSource().sendFailure(Component.literal("Erro ao teleportar o jogador!"));
+            context.getSource().sendFailure(Component.literal( InfinityNexusMiner.MESSAGE + "Erro ao teleportar o jogador!"));
+            e.printStackTrace();
             return 0;
         }
     }

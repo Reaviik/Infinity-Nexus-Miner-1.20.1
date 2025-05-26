@@ -1,3 +1,6 @@
 {
-  "parent": "infinity_nexus_miner:block/purple_light_crystal"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "infinity_nexus_miner:item/purple_light_crystal"
+  }
 }

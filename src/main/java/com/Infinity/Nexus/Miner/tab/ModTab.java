@@ -7,15 +7,16 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
+import java.util.function.Supplier;
 
 public class ModTab {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, InfinityNexusMiner.MOD_ID);
-    public static final RegistryObject<CreativeModeTab> INFINITY_TAB_ADDITIONS = CREATIVE_MODE_TABS.register("infinity_nexus_miner",
-                                                            //Tab Icon
+    public static final Supplier<CreativeModeTab> INFINITY_TAB_ADDITIONS = CREATIVE_MODE_TABS.register("infinity_nexus_miner",
+            //Tab Icon
             () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModBlocksMiner.MINER.get()))
                     .title(Component.translatable("itemGroup.infinity_nexus_miner"))
                     .displayItems((pParameters, pOutput) -> {
@@ -67,6 +68,18 @@ public class ModTab {
                         pOutput.accept(new ItemStack(ModBlocksMiner.RED_CLEAR_GLASS.get()));
                         pOutput.accept(new ItemStack(ModBlocksMiner.ANCIENT_CLEAR_GLASS.get()));
                         pOutput.accept(new ItemStack(ModBlocksMiner.CHRISTMAS_CLEAR_GLASS.get()));
+                        //-------------------------//-------------------------//
+                        //Crystal Blocks
+                        pOutput.accept(new ItemStack(ModBlocksMiner.WHITE_CRYSTAL_BLOCK.get()));
+                        pOutput.accept(new ItemStack(ModBlocksMiner.YELLOW_CRYSTAL_BLOCK.get()));
+                        pOutput.accept(new ItemStack(ModBlocksMiner.BLUE_CRYSTAL_BLOCK.get()));
+                        pOutput.accept(new ItemStack(ModBlocksMiner.ORANGE_CRYSTAL_BLOCK.get()));
+                        pOutput.accept(new ItemStack(ModBlocksMiner.GREEN_CRYSTAL_BLOCK.get()));
+                        pOutput.accept(new ItemStack(ModBlocksMiner.PURPLE_CRYSTAL_BLOCK.get()));
+                        pOutput.accept(new ItemStack(ModBlocksMiner.PINK_CRYSTAL_BLOCK.get()));
+                        pOutput.accept(new ItemStack(ModBlocksMiner.RED_CRYSTAL_BLOCK.get()));
+                        pOutput.accept(new ItemStack(ModBlocksMiner.ANCIENT_CRYSTAL_BLOCK.get()));
+                        pOutput.accept(new ItemStack(ModBlocksMiner.CHRISTMAS_CRYSTAL_BLOCK.get()));
                         //-------------------------//-------------------------//
                         //Structural Block
                         //pOutput.accept(new ItemStack(ModBlocks.STRUCTURAL_BLOCK.get()));

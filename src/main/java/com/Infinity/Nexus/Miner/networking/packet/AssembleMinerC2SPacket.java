@@ -1,69 +1,45 @@
 package com.Infinity.Nexus.Miner.networking.packet;
 
+import com.Infinity.Nexus.Core.utils.GetResourceLocation;
+import com.Infinity.Nexus.Miner.InfinityNexusMiner;
 import com.Infinity.Nexus.Miner.block.entity.MinerBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-import java.util.function.Supplier;
+public record AssembleMinerC2SPacket(BlockPos pos) implements CustomPacketPayload {
+    public static final Type<AssembleMinerC2SPacket> TYPE =
+            new Type<>(GetResourceLocation.withNamespaceAndPath(InfinityNexusMiner.MOD_ID, "assemble_miner"));
 
-/**
- * Network packet sent from client to server to toggle the working area display of a Mob Crusher.
- * Handles the synchronization of area visibility state between client and server.
- */
-public class AssembleMinerC2SPacket {
-    private final BlockPos pos;
+    public static final StreamCodec<FriendlyByteBuf, AssembleMinerC2SPacket> STREAM_CODEC = StreamCodec.composite(
+            BlockPos.STREAM_CODEC,
+            AssembleMinerC2SPacket::pos,
+            AssembleMinerC2SPacket::new
+    );
 
-    /**
-     * Creates a new toggle area packet
-     *
-     * @param pos The position of the Mob Crusher block
-     */
-    public AssembleMinerC2SPacket(BlockPos pos) {
-        this.pos = pos;
+    @Override
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 
-    /**
-     * Deserializes packet data from the network buffer
-     *
-     * @param buf The network buffer containing serialized packet data
-     */
-    public AssembleMinerC2SPacket(FriendlyByteBuf buf) {
-        this.pos = buf.readBlockPos();
-    }
-
-    /**
-     * Serializes packet data to the network buffer
-     *
-     * @param buf The network buffer to write the packet data to
-     */
-    public void toBytes(FriendlyByteBuf buf) {
-        buf.writeBlockPos(pos);
-    }
-
-    /**
-     * Processes the packet on the server side and broadcasts the state change to nearby players
-     *
-     * @param supplier The network context supplier
-     * @return true if the packet was handled successfully
-     */
-    public boolean handle(Supplier<NetworkEvent.Context> supplier) {
-        NetworkEvent.Context context = supplier.get();
+    public static void handle(AssembleMinerC2SPacket packet, IPayloadContext context) {
         context.enqueueWork(() -> {
-            ServerPlayer player = context.getSender();
+            ServerPlayer player = (ServerPlayer) context.player();
             if (player == null) return;
 
             ServerLevel level = player.serverLevel();
-            if (level.getBlockEntity(pos) instanceof MinerBlockEntity blockEntity) {
+            if (level.getBlockEntity(packet.pos()) instanceof MinerBlockEntity blockEntity) {
                 blockEntity.makeStructure();
                 blockEntity.setChanged();
-                blockEntity.makeStructure();
-                blockEntity.setChanged();
-                level.sendBlockUpdated(pos, blockEntity.getBlockState(), blockEntity.getBlockState(), 3);
+                level.sendBlockUpdated(packet.pos(),
+                        blockEntity.getBlockState(),
+                        blockEntity.getBlockState(),
+                        3);
             }
         });
-        return true;
     }
 }

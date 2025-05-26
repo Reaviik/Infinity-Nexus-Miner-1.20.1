@@ -1,14 +1,14 @@
 package com.Infinity.Nexus.Miner.utils;
 
 import com.Infinity.Nexus.Core.fakePlayer.IFFakePlayer;
+import com.Infinity.Nexus.Core.itemStackHandler.RestrictedItemStackHandler;
+import com.Infinity.Nexus.Core.utils.ItemStackHandlerUtils;
 import com.Infinity.Nexus.Miner.block.ModBlocksMiner;
 import com.Infinity.Nexus.Miner.block.custom.Structure;
 import com.Infinity.Nexus.Miner.block.entity.MinerBlockEntity;
-import com.Infinity.Nexus.Miner.config.Config;
 import com.Infinity.Nexus.Miner.config.ConfigUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
@@ -18,15 +18,14 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.items.IItemHandler;
 
 public class MinerTierStructure {
 
     public static boolean hasStructure(int tier, BlockPos pos, Level level, IItemHandler itemHandler, boolean actualize) {
         BlockPos[] offsets;
         int height;
-        Block structureLevel = getStructureLevel(tier - 1);
+        Block structureLevel = getStructureLevel(tier);
 
         switch (tier) {
             case 1:
@@ -228,11 +227,22 @@ public class MinerTierStructure {
     }
 
     private static Block getStructureLevel(int t) {
-        return ForgeRegistries.BLOCKS.getValue(new ResourceLocation(Config.list_of_structures.get(t)));
+        return switch (t) {
+            case 1 -> ModBlocksMiner.WOOD_STRUCTURE.get();
+            case 2 -> ModBlocksMiner.STONE_STRUCTURE.get();
+            case 3 -> ModBlocksMiner.COPPER_STRUCTURE.get();
+            case 4 -> ModBlocksMiner.IRON_STRUCTURE.get();
+            case 5 -> ModBlocksMiner.GOLD_STRUCTURE.get();
+            case 6 -> ModBlocksMiner.QUARTZ_STRUCTURE.get();
+            case 7 -> ModBlocksMiner.DIAMOND_STRUCTURE.get();
+            case 8 -> ModBlocksMiner.EMERALD_STRUCTURE.get();
+            case 9 -> ModBlocksMiner.NETHERITE_STRUCTURE.get();
+            default -> Blocks.AIR;
+        };
     }
     private static void removeStructureFromSlots(IItemHandler itemHandler, int slot) {
-        if(itemHandler.getStackInSlot(slot).getCount() > 0 && ConfigUtils.isStructure(itemHandler.getStackInSlot(slot).getItem())) {
-            itemHandler.extractItem(slot, 1, false);
+        if(itemHandler.getStackInSlot(slot).getCount() > 0 && ConfigUtils.isStructure(itemHandler.getStackInSlot(slot))) {
+            ItemStackHandlerUtils.extractItem(slot, 1, false, (RestrictedItemStackHandler) itemHandler);
         }
     }
     private static int getStructureAmount(IItemHandler itemHandler, int slot, int machineLevel) {

@@ -3,15 +3,15 @@ package com.Infinity.Nexus.Miner.block.custom;
 import com.Infinity.Nexus.Miner.block.custom.common.CommonUpgrades;
 import com.Infinity.Nexus.Miner.block.entity.MinerBlockEntity;
 import com.Infinity.Nexus.Miner.block.entity.ModBlockEntities;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -31,7 +31,6 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -40,6 +39,7 @@ public class Miner extends BaseEntityBlock {
 
     public static IntegerProperty LIT = IntegerProperty.create("lit", 0, 17);
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static  final MapCodec<Miner> MINER_CODEC = simpleCodec(Miner::new);
 
     public Miner(Properties pProperties) {
         super(pProperties);
@@ -94,11 +94,15 @@ public class Miner extends BaseEntityBlock {
     }
 
     @Override
-    public @NotNull InteractionResult use(@NotNull BlockState pState, Level pLevel, @NotNull BlockPos pPos, @NotNull Player pPlayer, @NotNull InteractionHand pHand, @NotNull BlockHitResult pHit) {
-        CommonUpgrades.setUpgrades(pLevel, pPos, pPlayer);
-        return InteractionResult.sidedSuccess(pLevel.isClientSide());
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        CommonUpgrades.setUpgrades(level, pos, player);
+        return ItemInteractionResult.sidedSuccess(level.isClientSide());
     }
 
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return MINER_CODEC;
+    }
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
@@ -106,40 +110,34 @@ public class Miner extends BaseEntityBlock {
     }
 
 
-    public void spawnParticles(BlockState pState, Level pLevel, BlockPos pPos, ParticleOptions source) {
-        pLevel.addParticle(source, pPos.getX() + 0.5D, pPos.getY() +0.5D, pPos.getZ() + 0.5D, 0.0D, 0.0D, 0.0D);
-    }
-
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-        if(pLevel.isClientSide()) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        if(level.isClientSide()) {
             return null;
         }
 
-        return createTickerHelper(pBlockEntityType, ModBlockEntities.MINER_BE.get(),
+        return createTickerHelper(type, ModBlockEntities.MINER_BE.get(),
                 (pLevel1, pPos, pState1, pBlockEntity) -> pBlockEntity.tick(pLevel1, pPos, pState1));
     }
 
     @Override
-    public void setPlacedBy(Level pLevel, BlockPos pPos, BlockState pState, @Nullable LivingEntity pPlacer, ItemStack pStack) {
-        if (pPlacer instanceof Player) {
-            Player player = (Player) pPlacer;
-            MinerBlockEntity minerBlockEntity = (MinerBlockEntity) pLevel.getBlockEntity(pPos);
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+        if (placer instanceof Player) {
+            Player player = (Player) placer;
+            MinerBlockEntity minerBlockEntity = (MinerBlockEntity) level.getBlockEntity(pos);
             minerBlockEntity.setOwner(player);
         }
-        super.setPlacedBy(pLevel, pPos, pState, pPlacer, pStack);
+        super.setPlacedBy(level, pos, state, placer, stack);
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> components, TooltipFlag flag) {
-            if (Screen.hasShiftDown()) {
-                components.add(Component.translatable("item.infinity_nexus_miner.miner_description"));
-            } else {
-                components.add(Component.translatable("tooltip.infinity_nexus.pressShift"));
-            }
-
-            super.appendHoverText(stack, level, components, flag);
-
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> components, TooltipFlag tooltipFlag) {
+        if (Screen.hasShiftDown()) {
+            components.add(Component.translatable("item.infinity_nexus_miner.miner_description"));
+        } else {
+            components.add(Component.translatable("tooltip.infinity_nexus.pressShift"));
+        }
+        super.appendHoverText(stack, context, components, tooltipFlag);
     }
 }

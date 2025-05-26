@@ -5,9 +5,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -20,14 +17,14 @@ public class Crystals extends Item {
 
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext tooltip, List<Component> components, TooltipFlag flag) {
         if (Screen.hasShiftDown()) {
             components.add(Component.translatable("item.infinity_nexus_miner.crystal_description").append(" §5"+tier));
         } else {
             components.add(Component.translatable("tooltip.infinity_nexus.pressShift"));
         }
 
-        super.appendHoverText(stack, level, components, flag);
+        super.appendHoverText(stack, tooltip, components, flag);
     }
 
     @Override

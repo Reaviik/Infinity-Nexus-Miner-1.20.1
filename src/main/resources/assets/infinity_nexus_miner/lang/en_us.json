@@ -3,7 +3,7 @@
   "tooltip.infinity_nexus.pressShift":"§bPress §eShift §bto see more",
 
   "block.infinity_nexus_miner.miner": "Miner",
-  "item.infinity_nexus_miner.miner_description": "§5Multiblock Miner.\n§bMust be placed at the correct height relative to the ground, depending on the level of the installed component.\n§fRedstone: 5° §a-> Wood Structure.\n§fBasic: 5° §a-> Stone Structure.\n§eReinforced: 7° §a-> Copper Structure.\n§eLogic: 7° §a-> Iron Structure.\n§cAdvanced: 9° §a-> Gold Structure.\n§cRefined: 9° §a-> Quartz Structure.\n§5Integral: 11° §a-> Diamond Structure.\n§5Infinity: 11° §a-> Emerald Structure.\n§8Ancestral: 11° §a-> Netherite Structure.",
+  "item.infinity_nexus_miner.miner_description": "§5Multiblock Miner.\n§bMust be placed at the correct height relative to the ground, depending on the level of the installed component.\n§9Click on the top right \"A\" button to assemble the structure.\n§fRedstone: 5° §a-> Wood Structure.\n§fBasic: 5° §a-> Stone Structure.\n§eReinforced: 7° §a-> Copper Structure.\n§eLogic: 7° §a-> Iron Structure.\n§cAdvanced: 9° §a-> Gold Structure.\n§cRefined: 9° §a-> Quartz Structure.\n§5Integral: 11° §a-> Diamond Structure.\n§5Infinity: 11° §a-> Emerald Structure.\n§8Ancestral: 11° §a-> Netherite Structure.",
 
   "infinity_nexus_mod.jei_information": "§9This machine needs a component to function.",
   "item.infinity_nexus_miner.crystal_description": "§9This item can be obtained from the Miner tier",
@@ -37,6 +37,16 @@
   "block.infinity_nexus_miner.blue_clear_glass": "Blue Clear Glass",
   "block.infinity_nexus_miner.ancient_clear_glass": "Ancient Clear Glass",
 
+  "block.infinity_nexus_miner.purple_crystal_block": "Purple Crystal Block",
+  "block.infinity_nexus_miner.yellow_crystal_block": "Yellow Crystal Block",
+  "block.infinity_nexus_miner.white_crystal_block": "White Crystal Block",
+  "block.infinity_nexus_miner.red_crystal_block": "Red Crystal Block",
+  "block.infinity_nexus_miner.orange_crystal_block": "Orange Crystal Block",
+  "block.infinity_nexus_miner.pink_crystal_block": "Pink Crystal Block",
+  "block.infinity_nexus_miner.green_crystal_block": "Green Crystal Block",
+  "block.infinity_nexus_miner.blue_crystal_block": "Blue Crystal Block",
+  "block.infinity_nexus_miner.ancient_crystal_block": "Ancient Crystal Block",
+
   "block.infinity_nexus_miner.wood_structure": "Wood Structure",
   "block.infinity_nexus_miner.stone_structure": "Stone Structure",
   "block.infinity_nexus_miner.copper_structure": "Copper Structure",
@@ -46,6 +56,7 @@
   "block.infinity_nexus_miner.diamond_structure": "Diamond Structure",
   "block.infinity_nexus_miner.emerald_structure": "Emerald Structure",
   "block.infinity_nexus_miner.netherite_structure": "Netherite Structure",
+  "block.infinity_nexus_miner.structural_block": "Structural Block",
 
   "tooltip.infinity_nexus_miner.structure_slot_tooltip": "Structure Slot",
   "tooltip.infinity_nexus_miner.output_slot_tooltip": "Output Slot's",
@@ -54,7 +65,21 @@
   "tooltip.infinity_nexus_miner.fuel_slot_tooltip": "Fuel Slot",
 
   "block.infinity_nexus_miner.christmas_clear_glass": "RGB Clear Glass",
+  "block.infinity_nexus_miner.christmas_crystal_block": "RGB Crystal Block",
   "block.infinity_nexus_miner.christmas_light_crystal": "Christmas Light Crystal",
   "gui.infinity_nexus_mod.miner.assemble": "Assemble Miner Structure",
-  "chat.infinity_nexus_miner.miner_is_full": "§cInfinity Nexus Miner: §fYour miner is Full!"
+
+  "gui.infinity_nexus_miner.redstone": "Redstone",
+  "gui.infinity_nexus_miner.component": "Component",
+  "gui.infinity_nexus_miner.energy": "Energy",
+  "gui.infinity_nexus_miner.structure": "Structure",
+  "gui.infinity_nexus_miner.slot": "Slot",
+  "gui.infinity_nexus_miner.ores": "Ores",
+  "gui.infinity_nexus_miner.link_on": "Linked",
+  "gui.infinity_nexus_miner.link_off": "Unlinked",
+  "gui.infinity_nexus_miner.mining": "Mining",
+
+  "chat.infinity_nexus_miner.miner_is_full": "§cYour miner is full!",
+  "infinity_nexus_miner.miner_owner": "Owner: ",
+  "infinity_nexus_miner.miner_level": "Level: "
 }

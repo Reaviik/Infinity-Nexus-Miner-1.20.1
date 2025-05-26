@@ -2,26 +2,17 @@ package com.Infinity.Nexus.Miner.block.custom;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.Nullable;
 
 public class LightCrystal extends ButtonBlock {
-
     protected static final VoxelShape CEILING_AABB_X =         Block.box(6.0D, 12.0D, 6.0D, 10.0D, 16.0D, 10.0D);
     protected static final VoxelShape PRESSED_CEILING_AABB_X = Block.box(6.0D, 12.0D, 6.0D, 10.0D, 16.0D, 10.0D);
     protected static final VoxelShape CEILING_AABB_Z =         Block.box(6.0D, 12.0D, 6.0D, 10.0D, 16.0D, 10.0D);
@@ -39,7 +30,7 @@ public class LightCrystal extends ButtonBlock {
     protected static final VoxelShape EAST_AABB =              Block.box(0.0D, 6.0D, 6.0D, 4.0D, 10.0D, 10.0D);
     protected static final VoxelShape PRESSED_EAST_AABB =      Block.box(0.0D, 6.0D, 6.0D, 4.0D, 10.0D, 10.0D);
     public LightCrystal(Properties properties, BlockSetType type, int ticksToStayPressed, boolean arrowsCanPress) {
-        super(properties, type, ticksToStayPressed, arrowsCanPress);
+        super(type, ticksToStayPressed, properties);
     }
     @Override
     public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
