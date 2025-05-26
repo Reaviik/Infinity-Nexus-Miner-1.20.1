@@ -1,34 +1,30 @@
 package com.Infinity.Nexus.Miner.block.entity;
 
-import com.Infinity.Nexus.Core.block.entity.WrappedHandler;
 import com.Infinity.Nexus.Core.block.entity.common.SetMachineLevel;
 import com.Infinity.Nexus.Core.block.entity.common.SetUpgradeLevel;
+import com.Infinity.Nexus.Core.itemStackHandler.RestrictedItemStackHandler;
 import com.Infinity.Nexus.Core.items.ModItems;
 import com.Infinity.Nexus.Core.utils.ModEnergyStorage;
 import com.Infinity.Nexus.Core.utils.ModUtils;
 import com.Infinity.Nexus.Miner.block.custom.Miner;
-import com.Infinity.Nexus.Miner.block.entity.wrappedHandlerMap.MinerHandler;
 import com.Infinity.Nexus.Miner.config.Config;
 import com.Infinity.Nexus.Miner.config.ConfigUtils;
-import com.Infinity.Nexus.Miner.recipes.MinerRecipes;
+import com.Infinity.Nexus.Miner.recipes.MinerRecipe;
+import com.Infinity.Nexus.Miner.recipes.MinerRecipeInput;
+import com.Infinity.Nexus.Miner.recipes.ModRecipes;
 import com.Infinity.Nexus.Miner.screen.miner.MinerMenu;
 import com.Infinity.Nexus.Miner.utils.MinerTierStructure;
-import com.Infinity.Nexus.Miner.utils.ModTags;
 import com.Infinity.Nexus.Miner.utils.ModUtilsMiner;
-import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
-import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -42,19 +38,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.energy.IEnergyStorage;
+import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -63,12 +54,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MinerBlockEntity extends BlockEntity implements MenuProvider {
     float rotation = 0;
-    private final ItemStackHandler itemHandler = new ItemStackHandler(19) {
+    private final RestrictedItemStackHandler itemHandler = new RestrictedItemStackHandler(19) {
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();
-            if(slot == COMPONENT_SLOT){
-                verify = maxVerify;
+            if(!level.isClientSide()) {
+                level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
             }
         }
 
@@ -80,14 +71,21 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
                 case 13 -> ModUtils.isComponent(stack);
                 case 14 -> stack.getItem() == Items.ENCHANTED_BOOK || stack.isEnchanted();
                 case 15 -> stack.is(ModItems.LINKING_TOOL.get().asItem());
-                case 16 -> ForgeHooks.getBurnTime(stack, null) > 0;
-                case 17 -> ConfigUtils.isStructure(stack.getItem());
+                case 16 -> stack.getBurnTime(null) > 0;
+                case 17 -> ConfigUtils.isStructure(stack);
                 case 18 -> false;
                 default -> super.isItemValid(slot, stack);
             };
         }
-    };
 
+        @Override
+        public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate, boolean fromAutomation) {
+            if(slot < 8){
+                return super.extractItem(slot, amount, simulate, false);
+            }
+            return super.extractItem(slot, amount, simulate, fromAutomation);
+        }
+    };
     private static final int[] OUTPUT_SLOT = {0, 1, 2, 3, 4, 5, 6, 7, 8};
     private static final int[] UPGRADE_SLOTS = {9, 10, 11, 12};
     private static final int COMPONENT_SLOT = 13;
@@ -110,25 +108,11 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         };
     }
 
-    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
-    private LazyOptional<IEnergyStorage> lazyEnergyStorage = LazyOptional.empty();
-
-
-    private final Map<Direction, LazyOptional<WrappedHandler>> directionWrappedHandlerMap =
-            Map.of(
-                    Direction.UP, LazyOptional.of(() -> new WrappedHandler(itemHandler, (i) -> MinerHandler.extract(i, Direction.UP), MinerHandler::insert)),
-                    Direction.DOWN, LazyOptional.of(() -> new WrappedHandler(itemHandler, (i) -> MinerHandler.extract(i, Direction.DOWN), MinerHandler::insert)),
-                    Direction.NORTH, LazyOptional.of(() -> new WrappedHandler(itemHandler, (i) -> MinerHandler.extract(i, Direction.NORTH), MinerHandler::insert)),
-                    Direction.SOUTH, LazyOptional.of(() -> new WrappedHandler(itemHandler, (i) -> MinerHandler.extract(i, Direction.SOUTH), MinerHandler::insert)),
-                    Direction.EAST, LazyOptional.of(() -> new WrappedHandler(itemHandler, (i) -> MinerHandler.extract(i, Direction.EAST), MinerHandler::insert)),
-                    Direction.WEST, LazyOptional.of(() -> new WrappedHandler(itemHandler, (i) -> MinerHandler.extract(i, Direction.WEST), MinerHandler::insert)));
-
-
     protected final ContainerData data;
     private int progress = 0;
-    private int maxProgress = 130;
+    private int maxProgress = 5;
     private int verify = 0;
-    private int maxVerify = 300;
+    private int maxVerify = 15;
     private int structure = 0;
 
     private int hasRedstoneSignal = 0;
@@ -142,9 +126,6 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
     private int linky = 0;
     private int linkz = 0;
     private int linkFace = 0;
-
-    private String owner;
-    private int delay = (20 * 60);
 
 
     public MinerBlockEntity(BlockPos pPos, BlockState pBlockState) {
@@ -170,8 +151,6 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
                     case 12 -> MinerBlockEntity.this.linky;
                     case 13 -> MinerBlockEntity.this.linkz;
                     case 14 -> MinerBlockEntity.this.linkFace;
-
-                    case 15 -> MinerBlockEntity.this.owner == null ? 0 : 1;
 
                     default -> 0;
                 };
@@ -208,52 +187,12 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
 
     }
 
-    @Override
-    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == ForgeCapabilities.ENERGY) {
-            return lazyEnergyStorage.cast();
-        }
-
-        if (cap == ForgeCapabilities.ITEM_HANDLER) {
-            if (side == null) {
-                return lazyItemHandler.cast();
-            }
-
-            if (directionWrappedHandlerMap.containsKey(side)) {
-                Direction localDir = this.getBlockState().getValue(Miner.FACING);
-
-                if (side == Direction.UP || side == Direction.DOWN) {
-                    return directionWrappedHandlerMap.get(side).cast();
-                }
-
-                return switch (localDir) {
-                    default -> directionWrappedHandlerMap.get(side.getOpposite()).cast();
-                    case EAST -> directionWrappedHandlerMap.get(side.getClockWise()).cast();
-                    case SOUTH -> directionWrappedHandlerMap.get(side).cast();
-                    case WEST -> directionWrappedHandlerMap.get(side.getCounterClockWise()).cast();
-                };
-            }
-        }
-
-
-        return super.getCapability(cap, side);
+    public IItemHandler getItemHandler(Direction direction) {
+           return itemHandler;
     }
-
-    @Override
-    public void onLoad() {
-        super.onLoad();
-        lazyItemHandler = LazyOptional.of(() -> itemHandler);
-        lazyEnergyStorage = LazyOptional.of(() -> ENERGY_STORAGE);
+    public IEnergyStorage getEnergyStorage(@Nullable Direction direction) {
+        return ENERGY_STORAGE;
     }
-
-    @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-        lazyItemHandler.invalidate();
-        lazyEnergyStorage.invalidate();
-    }
-
-
     public static int getComponentSlot() {
         return COMPONENT_SLOT;
     }
@@ -274,18 +213,15 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
-        return new MinerMenu(pContainerId, pPlayerInventory, this, this.data);
+        return new MinerMenu(pContainerId, pPlayerInventory,this, this.data, this.itemHandler);
     }
 
     public IEnergyStorage getEnergyStorage() {
-        return ENERGY_STORAGE;
+        return this.ENERGY_STORAGE;
     }
 
     public void setEnergyLevel(int energy) {
         this.ENERGY_STORAGE.setEnergy(energy);
-    }
-    public int[] getDisplayInfo() {
-        return new int[] { data.get(5), data.get(8), data.get(9), data.get(4), data.get(7), data.get(10)};
     }
     public static int getRecipeSlot() {
         return RECIPE_SLOT;
@@ -294,11 +230,15 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         return STRUCTURE_SLOT;
     }
 
+    public int[] getDisplayInfo() {
+        return new int[] { data.get(5), data.get(8), data.get(9), data.get(4), data.get(7), data.get(10)};
+    }
+
     public String getHasLink() {
-        if (this.data.get(11) != 0 || this.data.get(12) != 0 || this.data.get(13) != 0) {
-            return "X: " + this.data.get(11) + ", Y: " + this.data.get(12) + ", Z: " + this.data.get(13);
+        if (data.get(11) != 0 || data.get(12) != 0 || data.get(13) != 0) {
+            return Component.translatable("gui.infinity_nexus_miner.link_on").getString() + " X: " + this.data.get(11) + ", Y: " + this.data.get(12) + ", Z: " + this.data.get(13);
         } else {
-            return "[Unlinked]";
+            return Component.translatable("gui.infinity_nexus_miner.link_off").getString();
         }
     }
 
@@ -307,8 +247,8 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag pTag) {
-        pTag.put("inventory", itemHandler.serializeNBT());
+    protected void saveAdditional(CompoundTag pTag, HolderLookup.Provider registries) {
+        pTag.put("inventory", itemHandler.serializeNBT(registries));
         pTag.putInt("miner.progress", progress);
         pTag.putInt("miner.energy", ENERGY_STORAGE.getEnergyStored());
 
@@ -326,15 +266,13 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         pTag.putInt("miner.linkz", data.get(13));
         pTag.putInt("miner.linkFace", data.get(14));
 
-        pTag.putString("owner", owner == null ? "" : owner);
-
-        super.saveAdditional(pTag);
+        super.saveAdditional(pTag, registries);
     }
 
     @Override
-    public void load(CompoundTag pTag) {
-        super.load(pTag);
-        itemHandler.deserializeNBT(pTag.getCompound("inventory"));
+    protected void loadAdditional(CompoundTag pTag, HolderLookup.Provider registries) {
+        super.loadAdditional(pTag, registries);
+        itemHandler.deserializeNBT(registries, pTag.getCompound("inventory"));
         progress = pTag.getInt("miner.progress");
         ENERGY_STORAGE.setEnergy(pTag.getInt("miner.energy"));
 
@@ -351,52 +289,42 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         linky = pTag.getInt("miner.linky");
         linkz = pTag.getInt("miner.linkz");
         linkFace = pTag.getInt("miner.linkFace");
-
-        if (pTag.getString("owner").equals("")) {
-            owner = null;
-        } else {
-            owner = pTag.getString("owner");
-        }
     }
 
-
-    public void tick(Level pLevel, BlockPos pPos, BlockState pState) {
+    public <T extends BlockEntity> void tick(Level pLevel, BlockPos pPos, BlockState pState) {
         if (pLevel.isClientSide) {
             return;
         }
-        if (!hasProgressFinished()) {
-            this.data.set(6, 0);
-            increaseCraftingProgress();
-            return;
-        }
-
-        this.data.set(6, 1);
-
         int machineLevel = getMachineLevel() - 1 <= 0 ? 0 : getMachineLevel() - 1;
-        int lit = pState.getValue(Miner.LIT);
         if (this.structure == 0) {
-            if(lit != machineLevel) {
+            if(pState.getValue(Miner.LIT) != machineLevel) {
                 pLevel.setBlock(pPos, pState.setValue(Miner.LIT, machineLevel), 3);
             }
         }
         if (isRedstonePowered(pPos)) {
             this.data.set(5, 1);
-            if(lit != machineLevel) {
+            if(pState.getValue(Miner.LIT) != machineLevel) {
                 pLevel.setBlock(pPos, pState.setValue(Miner.LIT, machineLevel), 3);
             }
             return;
         }
         this.data.set(5, 0);
 
+        if (!hasProgressFinished()) {
+            this.data.set(6, 0);
+            increaseCraftingProgress();
+            return;
+        }
+        this.data.set(6, 1);
+
         if (!hasEmptySlot()) {
             this.data.set(7, 0);
-            if(lit != machineLevel) {
+            if(pState.getValue(Miner.LIT) != machineLevel) {
                 pLevel.setBlock(pPos, pState.setValue(Miner.LIT, machineLevel), 3);
             }
             if(hasProgressFinished()){
                 insertItemOnInventory(ItemStack.EMPTY);
             }
-            notifyOwner(pPos);
             return;
         }
         this.data.set(7, 1);
@@ -404,7 +332,7 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         resetProgress();
         if (!hasComponent()) {
             this.data.set(8, 0);
-            if(lit != machineLevel) {
+            if(pState.getValue(Miner.LIT) != machineLevel) {
                 pLevel.setBlock(pPos, pState.setValue(Miner.LIT, machineLevel), 3);
             }
             return;
@@ -415,7 +343,7 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         if (!hasEnoughEnergy(machineLevel)) {
             verifySolidFuel();
             this.data.set(9, 0);
-            if(lit != machineLevel) {
+            if(pState.getValue(Miner.LIT) != machineLevel) {
                 pLevel.setBlock(pPos, pState.setValue(Miner.LIT, machineLevel), 3);
             }
             return;
@@ -424,53 +352,18 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         if (hasRecipe(pPos, machineLevel)) {
             renderParticles(pPos);
             this.data.set(10, 1);
-            if(lit != machineLevel + 9) {
+            if(pState.getValue(Miner.LIT) != machineLevel + 9) {
                 pLevel.setBlock(pPos, pState.setValue(Miner.LIT, machineLevel + 9), 3);
             }
             craftItem(pPos, machineLevel);
             extractEnergy(this, machineLevel);
             verifySolidFuel();
-            ModUtils.ejectItemsWhePusher(pPos.above(),UPGRADE_SLOTS, OUTPUT_SLOT, itemHandler, pLevel);
+            ModUtils.ejectItemsWhePusher(pPos,UPGRADE_SLOTS, OUTPUT_SLOT, itemHandler, pLevel);
             setChanged(pLevel, pPos, pState);
         }
         this.data.set(10, 0);
 
     }
-
-    private void notifyOwner(BlockPos pPos) {
-        if (delay <= 0) {
-            Player player = this.level.getPlayerByUUID(UUID.fromString(this.owner));
-            if (player != null) {
-                // Obtendo as coordenadas do bloco
-                int x = pPos.getX();
-                int y = pPos.getY();
-                int z = pPos.getZ();
-
-                // Obtendo a dimensão do bloco
-                ResourceKey<Level> blockDimension = this.level.dimension();
-
-                // Criando a string da dimensão
-                String dimensionName = blockDimension.location().toString(); // Exemplo: "minecraft:overworld"
-
-                // Criando a mensagem com um clique executável
-                MutableComponent message = Component.translatable("chat.infinity_nexus_miner.miner_is_full")
-                        .append(" [TP]")
-                        .withStyle(style -> style
-                                .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
-                                        "/infinitynexusminer minertp " + player.getName().getString() + " '" + dimensionName + "' " + (x + 0.5) + " " + (y + 1) + " " + (z + 0.5) + " dezanove")
-                                )
-                        );
-
-                player.sendSystemMessage(message);
-                delay = (20 * 60) * 10; // Resetando o delay
-            }
-        } else {
-            delay--;
-        }
-    }
-
-
-
 
     private void renderParticles(BlockPos pPos) {
         double x = pPos.getX()+0.5;
@@ -479,6 +372,19 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         var level = (ServerLevel) this.getLevel();
         level.sendParticles(ParticleTypes.PORTAL, x, y, z, 12, 0, 0, 0, 0.1D);
     }
+
+//    private void notifyOwner(int machineLevel, Level pLevel) {
+//        try {
+//            if (this.customBlockData != null && this.customBlockData.getInt("ownerNotifyDelay") >= this.customBlockData.getInt("ownerNotifyMaxDelay")) {
+//                Player player = pLevel.getPlayerByUUID(this.customBlockData.getUUID("ownerUUID"));
+//                player.playNotifySound(SoundEvents.NOTE_BLOCK_GUITAR, SoundSource.BLOCKS, 5.0F, 1.0F);
+//                this.customBlockData.putInt("ownerNotifyDelay", 0);
+//            }
+//            this.customBlockData.putInt("ownerNotifyDelay", this.customBlockData.getInt("ownerNotifyDelay") + 1);
+//        } catch (Exception e) {
+//
+//        }
+//    }
 
     private boolean hasEmptySlot() {
         boolean hasFreeSpace = false;
@@ -525,33 +431,34 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
     private boolean isOre(ItemStack stack) {
         List<TagKey<Item>> tags = stack.getTags().toList();
 
-        return tags.toString().contains("forge:ores");
+        return tags.toString().contains("c:ores");
     }
     public void enchantPickaxe(ItemStack pikaxe, Map<Enchantment, Integer> enchantments) {
         if (enchantments.isEmpty()) {
             return;
         }
 
-        for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
-            if (entry.getKey() != Enchantments.SILK_TOUCH || Config.miner_can_be_use_silk_touch) {
-                if (entry.getKey() == Enchantments.BLOCK_FORTUNE) {
-                    pikaxe.enchant(Enchantments.BLOCK_FORTUNE, Math.min(entry.getValue(), Config.max_fortune_level));
-                } else {
-                    pikaxe.enchant(entry.getKey(), entry.getValue());
-                }
-            }
-        }
+        //for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
+        //    if (entry.getKey() != Enchantments.SILK_TOUCH || Config.miner_can_be_use_silk_touch) {
+        //        if (entry.getKey() == Enchantments.FORTUNE) {
+        //            pikaxe.enchant(Enchantments.FORTUNE, Math.min(entry.getValue(), Config.max_fortune_level));
+        //        } else {
+        //            pikaxe.enchant(entry.getKey(), entry.getValue());
+        //        }
+        //    }
+        //}
     }
     private ItemStack getPickaxe() {
         ItemStack enchantedItem = itemHandler.getStackInSlot(FORTUNE_SLOT);
         Item pickaxeInSlot = itemHandler.getStackInSlot(FORTUNE_SLOT).getItem();
         ItemStack pickaxe = new ItemStack(pickaxeInSlot instanceof PickaxeItem ? pickaxeInSlot.getDefaultInstance().getItem() : Items.NETHERITE_PICKAXE);
-        Map<Enchantment, Integer> enchantments = enchantedItem.getAllEnchantments();
+        //TODO Upgrade
+        //Map<Enchantment, Integer> enchantments = enchantedItem.getAllEnchantments();
         if (enchantedItem.getItem() instanceof EnchantedBookItem) {
-            Map<Enchantment, Integer> enchantment = EnchantmentHelper.getEnchantments(enchantedItem);
-            enchantPickaxe(pickaxe, enchantment);
+            //Map<Enchantment, Integer> enchantment = EnchantmentHelper.getEnchantments(enchantedItem);
+            //enchantPickaxe(pickaxe, enchantment);
         } else {
-            enchantPickaxe(pickaxe, enchantments);
+            //enchantPickaxe(pickaxe, enchantments);
         }
         return pickaxe;
     }
@@ -560,7 +467,10 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         ItemStack component = this.itemHandler.getStackInSlot(COMPONENT_SLOT);
         ItemStack output = getOutputItem(pos, machineLevel);
         Random random = new Random();
-        int random1 = random.nextInt(Config.crystal_chance * Math.max(machineLevel, 1));
+        int random1 = random.nextInt(100 * Math.max(machineLevel, 1));
+        if(Config.miner_mining_cost_component_durability){
+            ModUtils.useComponent(component, level, this.getBlockPos());
+        }
 
         if(random1 <= machineLevel+1){
             for(int i = 1; i <= random1; i++){
@@ -569,11 +479,6 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         }
 
         insertItemOnInventory(output);
-
-        if(Config.miner_mining_cost_component_durability){
-            ModUtils.useComponent(component, level, this.getBlockPos());
-        }
-
         if(ModUtils.getMuffler(itemHandler, UPGRADE_SLOTS) <= 0) {
             level.playSound(null, this.getBlockPos(), SoundEvents.BEE_HURT, SoundSource.BLOCKS, 0.1f, 1.0f);
         }
@@ -588,23 +493,19 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         this.verify++;
         return this.structure > 0;
     }
-    private Optional<MinerRecipes> getCurrentRecipe() {
-
-        SimpleContainer inventory = new SimpleContainer(itemHandler.getSlots());
-        for (int i = 0; i < itemHandler.getSlots(); i++) {
-            inventory.setItem(i, itemHandler.getStackInSlot(i));
-        }
-        return this.level.getRecipeManager().getRecipeFor(MinerRecipes.Type.INSTANCE, inventory, this.level);
+    private Optional<RecipeHolder<MinerRecipe>> getCurrentRecipe() {
+        return this.level.getRecipeManager()
+                .getRecipeFor(ModRecipes.MINER_RECIPE_TYPE.get(), new MinerRecipeInput(itemHandler.getStackInSlot(RECIPE_SLOT)), level);
     }
+
     private ItemStack getOutputItem(BlockPos pos, int machineLevel) {
-        Optional<MinerRecipes> recipe = Optional.empty();
+        Optional<RecipeHolder<MinerRecipe>> recipe = getCurrentRecipe();
 
         List<ItemStack> drops = new ArrayList<>();
         int levelMatch = (machineLevel == 8 ? 7 : machineLevel);
         int radio = ((int) Math.floor((double) levelMatch / 2) + 1);
 
         int startX = pos.getX() - radio;
-        ;
         int startY = pos.getY() - ((int) Math.floor((double) levelMatch + 4) / 2) * 2;
         int startZ = pos.getZ() - radio;
 
@@ -626,13 +527,11 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
                         BlockState blockState = level.getBlockState(blockPos);
                         ItemStack blockStack = new ItemStack(blockState.getBlock().asItem());
                         itemHandler.setStackInSlot(RECIPE_SLOT, blockStack);
-                        if(!itemHandler.getStackInSlot(RECIPE_SLOT).isEmpty()) {
-                            recipe = getCurrentRecipe();
-                            if (!recipe.isEmpty()) {
-                                if (blockState.isAir() || isOre(blockStack)) {
-                                    ItemStack drop = ModUtilsMiner.getDrop(blockStack, level, blockPos, getPickaxe());
-                                    drops.add(Objects.requireNonNullElse(drop, ItemStack.EMPTY));
-                                }
+                        recipe = getCurrentRecipe();
+                        if (!recipe.isEmpty()) {
+                            if (blockState.isAir() || isOre(blockStack)) {
+                                ItemStack drop = ModUtilsMiner.getDrop(blockStack, level, blockPos, getPickaxe());
+                                drops.add(Objects.requireNonNullElse(drop, ItemStack.EMPTY));
                             }
                         }
                     }
@@ -641,18 +540,18 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         }
         try {
             if (drops.isEmpty()) {
-                    ItemStack recipeItem = recipe.get().getResultItem(null);
-                    drops.add(recipeItem);
+                ItemStack recipeItem = recipe.get().value().getResultItem(null);
+                drops.add(recipeItem);
             }
-            if(!recipe.get().getFortune()){
-                ItemStack recipeItem = recipe.get().getResultItem(null);
+            if(!recipe.get().value().getFortune()){
+                ItemStack recipeItem = recipe.get().value().getResultItem(null);
                 drops.clear();
                 drops.add(recipeItem);
             }
         }catch (Exception e){
             drops.add(ItemStack.EMPTY);
         }
-        return drops.get(new Random().nextInt(drops.size()));
+        return drops.isEmpty() ? ItemStack.EMPTY : drops.get(new Random().nextInt(drops.size()));
     }
     private void insertItemOnInventory(ItemStack itemStack) {
         try {
@@ -663,7 +562,7 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
                 this.data.set(11, 0);
                 this.data.set(12, 0);
                 this.data.set(13, 0);
-                if (linkingTool.hasCustomHoverName()) {
+                if (!linkingTool.getHoverName().getString().equals(linkingTool.getItem().getDefaultInstance().getHoverName().getString())) {
                     String[] parts = name.substring(1, name.length() - 1).split(",");
                     int xl = 0;
                     int yl = 0;
@@ -695,27 +594,25 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
                         return;
                     }
                     if(!itemHandler.getStackInSlot(OUTPUT_SLOT[7]).isEmpty()) {
-                        if (blockEntity != null && canLink(blockEntity)) {
-                            blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER, ModUtilsMiner.getLinkedSide(facel)).ifPresent(iItemHandler -> {
-                                for (int slot = 0; slot < iItemHandler.getSlots(); slot++) {
-                                    if (ModUtils.canPlaceItemInContainer(itemStack.copy(), slot, iItemHandler) && iItemHandler.isItemValid(slot, itemStack.copy())) {
-                                        iItemHandler.insertItem(slot, itemStack.copy(), false);
+                        var object = level.getCapability(Capabilities.ItemHandler.BLOCK, blockEntity.getBlockPos(), null);
+                        if (object != null && canLink(blockEntity)) {
+                            for (int slot = 0; slot < object.getSlots(); slot++) {
+                                if (ModUtils.canPlaceItemInContainer(itemStack.copy(), slot, object) && object.isItemValid(slot, itemStack.copy())) {
+                                    object.insertItem(slot, itemStack.copy(), false);
+                                    success.set(true);
+                                    break;
+                                }
+                            }
+                            for (int slot = 0; slot < object.getSlots(); slot++) {
+                                for (int outputSlot : OUTPUT_SLOT) {
+                                    if (!itemHandler.getStackInSlot(outputSlot).isEmpty() && object.isItemValid(slot, itemStack.copy()) && ModUtils.canPlaceItemInContainer(itemHandler.getStackInSlot(outputSlot).copy(), slot, object)) {
+                                        object.insertItem(slot, itemHandler.getStackInSlot(outputSlot).copy(), false);
+                                        itemHandler.extractItem(outputSlot, itemHandler.getStackInSlot(outputSlot).getCount(), false);
                                         success.set(true);
                                         break;
                                     }
                                 }
-
-                                for (int slot = 0; slot < iItemHandler.getSlots(); slot++) {
-                                    for (int outputSlot : OUTPUT_SLOT) {
-                                        if (!itemHandler.getStackInSlot(outputSlot).isEmpty() && iItemHandler.isItemValid(slot, itemStack.copy()) && ModUtils.canPlaceItemInContainer(itemHandler.getStackInSlot(outputSlot).copy(), slot, iItemHandler)) {
-                                            iItemHandler.insertItem(slot, itemHandler.getStackInSlot(outputSlot).copy(), false);
-                                            itemHandler.extractItem(outputSlot, itemHandler.getStackInSlot(outputSlot).getCount(), false);
-                                            success.set(true);
-                                            break;
-                                        }
-                                    }
-                                }
-                            });
+                            }
                         }
                     }
                 }
@@ -760,11 +657,11 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     private void setMaxProgress(int machineLevel) {
-        int duration = structure == 0 ? 20 : Config.max_progress;
+        int duration = structure == 0 ? 5 : 120;
         int speed = ModUtils.getSpeed(itemHandler, UPGRADE_SLOTS);
 
         duration = duration / Math.max(((machineLevel+1) + speed), 1);
-        if(itemHandler.getStackInSlot(COMPONENT_SLOT).getItem() == ModItems.ANCESTRAL_COMPONENT.get() && speed == 16) {
+        if(itemHandler.getStackInSlot(COMPONENT_SLOT). getItem() == ModItems.ANCESTRAL_COMPONENT.get() && speed == 16) {
             maxProgress = 1;
         }else{
             maxProgress = Math.max(duration, 1);
@@ -778,13 +675,13 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
-        return saveWithFullMetadata();
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider lookupProvider) {
+        super.onDataPacket(net, pkt, lookupProvider);
     }
 
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
-        super.onDataPacket(net, pkt);
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+        return saveWithFullMetadata(registries);
     }
 
     public void makeStructure() {
@@ -793,9 +690,14 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         }
         MinerTierStructure.hasStructure(getMachineLevel(), this.getBlockPos(), this.getLevel(), this.itemHandler, true);
     }
+    public void resetVerify() {
+        this.data.set(2, this.data.get(3));
+        verify = maxVerify;
+        progress = maxProgress;
+    }
     private void verifySolidFuel(){
         ItemStack slotItem = itemHandler.getStackInSlot(FUEL_SLOT);
-        int burnTime = ForgeHooks.getBurnTime(slotItem, null) * Config.miner_fuel_multiplier;
+        int burnTime = slotItem.getBurnTime(null) * Config.miner_fuel_multiplier;
         if(burnTime > 1){
             while(itemHandler.getStackInSlot(FUEL_SLOT).getCount() > 0 && this.getEnergyStorage().getEnergyStored() + burnTime < this.getEnergyStorage().getMaxEnergyStored()){
                 this.getEnergyStorage().receiveEnergy(burnTime, false);
@@ -803,18 +705,15 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
             }
         }
     }
+
+
     public void setMachineLevel(ItemStack itemStack, Player player) {
         SetMachineLevel.setMachineLevel(itemStack, player, this, COMPONENT_SLOT, this.itemHandler);
-        progress = maxProgress;
-        setChanged();
+        makeStructure();
+        resetVerify();
     }
     public void setUpgradeLevel(ItemStack itemStack, Player player) {
         SetUpgradeLevel.setUpgradeLevel(itemStack, player, this, UPGRADE_SLOTS, this.itemHandler);
-        setChanged();
-    }
-
-    public void setOwner(Player player) {
-        owner = player.getStringUUID();
         setChanged();
     }
 
@@ -825,4 +724,5 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
     public float getRotation() {
         return rotation = rotation < 360F ? (float) (rotation + 0.1) : 0.0F;
     }
+
 }

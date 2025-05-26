@@ -37,6 +37,16 @@
   "block.infinity_nexus_miner.blue_clear_glass": "Vidro Azul Liso",
   "block.infinity_nexus_miner.ancient_clear_glass": "Vidro Ancestral Liso",
 
+  "block.infinity_nexus_miner.purple_crystal_block": "Bloco de Cristal Roxo",
+  "block.infinity_nexus_miner.yellow_crystal_block": "Bloco de Cristal Amarelo",
+  "block.infinity_nexus_miner.white_crystal_block": "Bloco de Cristal Branco",
+  "block.infinity_nexus_miner.red_crystal_block": "Bloco de Cristal Vermelho",
+  "block.infinity_nexus_miner.orange_crystal_block": "Bloco de Cristal Laranja",
+  "block.infinity_nexus_miner.pink_crystal_block": "Bloco de Cristal Rosa",
+  "block.infinity_nexus_miner.green_crystal_block": "Bloco de Cristal Verde",
+  "block.infinity_nexus_miner.blue_crystal_block": "Bloco de Cristal Azul",
+  "block.infinity_nexus_miner.ancient_crystal_block": "Bloco de Cristal Ancestral",
+
   "block.infinity_nexus_miner.wood_structure": "Estrutura de Madeira",
   "block.infinity_nexus_miner.stone_structure": "Estrutura de Pedra",
   "block.infinity_nexus_miner.copper_structure": "Estrutura de Cobre",
@@ -55,6 +65,17 @@
 
   "block.infinity_nexus_miner.christmas_clear_glass": "Vidro Liso RGB",
   "block.infinity_nexus_miner.christmas_light_crystal": "Cristal Luminoso RGB",
+  "block.infinity_nexus_miner.christmas_crystal_block": "Bloco de Cristal RGB",
   "gui.infinity_nexus_mod.miner.assemble": "Montar Estrutura da Mineradora",
-  "chat.infinity_nexus_miner.miner_is_full": "§cInfinity Nexus Miner: §fSua mineradora esta cheia!"
+
+
+  "gui.infinity_nexus_miner.redstone": "Redstone",
+  "gui.infinity_nexus_miner.component": "Componente",
+  "gui.infinity_nexus_miner.energy": "Energia",
+  "gui.infinity_nexus_miner.structure": "Estrutura",
+  "gui.infinity_nexus_miner.slot": "Slot",
+  "gui.infinity_nexus_miner.ores": "Minérios",
+  "gui.infinity_nexus_miner.link_on": "Linkado",
+  "gui.infinity_nexus_miner.link_off": "Deslincado",
+  "gui.infinity_nexus_miner.mining": "Minerando"
 }

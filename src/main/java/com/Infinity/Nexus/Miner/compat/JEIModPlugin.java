@@ -3,7 +3,8 @@ package com.Infinity.Nexus.Miner.compat;
 import com.Infinity.Nexus.Miner.InfinityNexusMiner;
 import com.Infinity.Nexus.Miner.block.ModBlocksMiner;
 import com.Infinity.Nexus.Miner.item.ModItemsMiner;
-import com.Infinity.Nexus.Miner.recipes.MinerRecipes;
+import com.Infinity.Nexus.Miner.recipes.MinerRecipe;
+import com.Infinity.Nexus.Miner.recipes.ModRecipes;
 import com.Infinity.Nexus.Miner.screen.miner.MinerScreen;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -12,6 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 
 import java.util.List;
@@ -22,7 +24,7 @@ public class JEIModPlugin implements IModPlugin {
 
     @Override
     public ResourceLocation getPluginUid() {
-        return new ResourceLocation(InfinityNexusMiner.MOD_ID, "jei_plugin");
+        return ResourceLocation.fromNamespaceAndPath(InfinityNexusMiner.MOD_ID, "jei_plugin");
     }
 
     @Override
@@ -37,11 +39,12 @@ public class JEIModPlugin implements IModPlugin {
         RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
 
         //-----------------------------------------Registry--------------------------------------------------//
-        List<MinerRecipes> minerRecipes = recipeManager.getAllRecipesFor(MinerRecipes.Type.INSTANCE);
+        List<MinerRecipe> minerRecipes = recipeManager.getAllRecipesFor(ModRecipes.MINER_RECIPE_TYPE.get())
+                .stream().map(RecipeHolder::value).toList();
 
         try {
-        registration.addRecipes(MinerCategory.MINER_TYPE, minerRecipes);
-        System.out.println("Registry: " + minerRecipes.size() +" "+ Component.translatable("block.infinity_nexus_miner.miner"));
+            registration.addRecipes(MinerCategory.MINER_TYPE, minerRecipes);
+            System.out.println("Registry: " + minerRecipes.size() +" "+ Component.translatable("block.infinity_nexus_miner.miner"));
         }catch (Exception ignored){
         }
         registration.addItemStackInfo(new ItemStack(ModBlocksMiner.MINER.get()), Component.translatable("infinity_nexus_mod.jei_information"));
@@ -68,7 +71,7 @@ public class JEIModPlugin implements IModPlugin {
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
         //-----------------------------------------Registry--------------------------------------------------//
-       registration.addRecipeClickArea(MinerScreen.class,162, -10,8,9, MinerCategory.MINER_TYPE);
+        registration.addRecipeClickArea(MinerScreen.class,162, -10,8,9, MinerCategory.MINER_TYPE);
     }
 
 }

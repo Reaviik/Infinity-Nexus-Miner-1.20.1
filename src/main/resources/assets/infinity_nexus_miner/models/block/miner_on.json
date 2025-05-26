@@ -2,8 +2,7 @@
   "credit": "Made with Blockbench",
   "textures": {
     "4": "minecraft:block/oak_log",
-    "9": "infinity_nexus_miner:block/miner/miner_0",
-    "particle": "infinity_nexus_miner:block/miner/miner_0"
+    "9": "infinity_nexus_miner:block/miner/miner_0"
   },
   "elements": [
     {

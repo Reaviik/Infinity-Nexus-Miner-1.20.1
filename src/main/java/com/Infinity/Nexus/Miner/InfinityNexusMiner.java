@@ -10,20 +10,18 @@ import com.Infinity.Nexus.Miner.screen.ModMenuTypes;
 import com.Infinity.Nexus.Miner.screen.miner.MinerScreen;
 import com.Infinity.Nexus.Miner.tab.ModTab;
 import com.mojang.logging.LogUtils;
-import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.server.ServerStartingEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import org.slf4j.Logger;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -34,9 +32,7 @@ public class InfinityNexusMiner
     public static final Logger LOGGER = LogUtils.getLogger();
 
 
-    public InfinityNexusMiner()
-    {
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+    public InfinityNexusMiner(IEventBus modEventBus, ModContainer modContainer) {
 
         ModBlocksMiner.register(modEventBus);
         ModItemsMiner.register(modEventBus);
@@ -47,32 +43,28 @@ public class InfinityNexusMiner
         ModBlockEntities.register(modEventBus);
         ModMenuTypes.register(modEventBus);
 
+        modEventBus.register(ModMessages.class);
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::setup);
+        modEventBus.addListener(this::registerScreens);
 
-        MinecraftForge.EVENT_BUS.register(this);
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
-
     private void commonSetup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
-            ModMessages.register();
+            // ModMessages.register();
         });
     }
-
-    // You can use SubscribeEvent and let the Event Bus discover methods to call
-    @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event) {
+    private void registerScreens(RegisterMenuScreensEvent event) {
+        event.register(ModMenuTypes.MINER_MENU.get(), MinerScreen::new);
     }
-
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
-    @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    @EventBusSubscriber(modid = MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents {
         @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event)
-        {
-            MenuScreens.register(ModMenuTypes.MINER_MENU.get(), MinerScreen::new);
+        public static void onClientSetup(FMLClientSetupEvent event) {
+            //MenuScreens.register(ModMenuTypes.MINER_MENU.get(), MinerScreen::new);
 
             ItemBlockRenderTypes.setRenderLayer(ModBlocksMiner.RED_LIGHT_CRYSTAL.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(ModBlocksMiner.BLUE_LIGHT_CRYSTAL.get(), RenderType.translucent());
@@ -95,6 +87,17 @@ public class InfinityNexusMiner
             ItemBlockRenderTypes.setRenderLayer(ModBlocksMiner.PINK_CLEAR_GLASS.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(ModBlocksMiner.ANCIENT_CLEAR_GLASS.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(ModBlocksMiner.CHRISTMAS_CLEAR_GLASS.get(), RenderType.translucent());
+
+            ItemBlockRenderTypes.setRenderLayer(ModBlocksMiner.RED_CRYSTAL_BLOCK.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(ModBlocksMiner.BLUE_CRYSTAL_BLOCK.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(ModBlocksMiner.GREEN_CRYSTAL_BLOCK.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(ModBlocksMiner.YELLOW_CRYSTAL_BLOCK.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(ModBlocksMiner.PURPLE_CRYSTAL_BLOCK.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(ModBlocksMiner.ORANGE_CRYSTAL_BLOCK.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(ModBlocksMiner.WHITE_CRYSTAL_BLOCK.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(ModBlocksMiner.PINK_CRYSTAL_BLOCK.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(ModBlocksMiner.ANCIENT_CRYSTAL_BLOCK.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(ModBlocksMiner.CHRISTMAS_CRYSTAL_BLOCK.get(), RenderType.translucent());
 
             ItemBlockRenderTypes.setRenderLayer(ModBlocksMiner.STRUCTURAL_BLOCK.get(), RenderType.translucent());
 

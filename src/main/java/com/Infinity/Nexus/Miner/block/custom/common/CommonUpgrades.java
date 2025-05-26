@@ -9,7 +9,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.network.NetworkHooks;
 
 public class CommonUpgrades {
 
@@ -18,7 +17,7 @@ public class CommonUpgrades {
         ItemStack stack = pPlayer.getMainHandItem().copy();
         boolean component = ModUtils.isComponent(stack);
         boolean upgrade = ModUtils.isUpgrade(stack);
-        if (pPlayer instanceof ServerPlayer) {
+        if (pPlayer instanceof ServerPlayer serverPlayer) {
             if (component) {
                 if (entity instanceof MinerBlockEntity be) {
                     be.setMachineLevel(stack, pPlayer);
@@ -28,7 +27,11 @@ public class CommonUpgrades {
                     be.setUpgradeLevel(stack, pPlayer);
                 }
             } else {
-                NetworkHooks.openScreen(((ServerPlayer) pPlayer), (MenuProvider) entity, pPos);
+                try {
+                    serverPlayer.openMenu((MenuProvider) entity, pPos);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

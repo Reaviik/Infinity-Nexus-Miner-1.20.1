@@ -11,23 +11,14 @@ import net.minecraft.world.level.block.Block;
 public class ModTags {
 
     public static class Blocks {
-        public static final TagKey<Block> MINER_STRUCTURE_0 = tag("machine_tier_0");
-        public static final TagKey<Block> MINER_STRUCTURE_1 = tag("machine_tier_1");
-        public static final TagKey<Block> MINER_STRUCTURE_2 = tag("machine_tier_2");
-        public static final TagKey<Block> MINER_STRUCTURE_3 = tag("machine_tier_3");
-        public static final TagKey<Block> MINER_STRUCTURE_4 = tag("machine_tier_4");
-        public static final TagKey<Block> MINER_STRUCTURE_5 = tag("machine_tier_5");
-        public static final TagKey<Block> MINER_STRUCTURE_6 = tag("machine_tier_6");
-        public static final TagKey<Block> MINER_STRUCTURE_7 = tag("machine_tier_7");
-
-        public static final TagKey<Block> MINER_STRUCTURE = tag("structure");
+        public static final TagKey<Block> MINER_STRUCTURE = tag("miner_structure");
 
 
         private static TagKey<Block> tag(String name) {
-            return BlockTags.create(new ResourceLocation(InfinityNexusMiner.MOD_ID, name));
+            return BlockTags.create(ResourceLocation.fromNamespaceAndPath(InfinityNexusMiner.MOD_ID, name));
         }
         private static TagKey<Block> forgeTag(String name) {
-            return BlockTags.create(new ResourceLocation("forge", name));
+            return BlockTags.create(ResourceLocation.fromNamespaceAndPath("forge", name));
         }
 
     }
@@ -42,23 +33,14 @@ public class ModTags {
         public static final TagKey<Item> UP_8 = tag("up_8");
         public static final TagKey<Item> UP_9 = tag("up_9");
 
-        public static final TagKey<Item> MINER_STRUCTURE_0 = tag("machine_tier_0");
-        public static final TagKey<Item> MINER_STRUCTURE_1 = tag("machine_tier_1");
-        public static final TagKey<Item> MINER_STRUCTURE_2 = tag("machine_tier_2");
-        public static final TagKey<Item> MINER_STRUCTURE_3 = tag("machine_tier_3");
-        public static final TagKey<Item> MINER_STRUCTURE_4 = tag("machine_tier_4");
-        public static final TagKey<Item> MINER_STRUCTURE_5 = tag("machine_tier_5");
-        public static final TagKey<Item> MINER_STRUCTURE_6 = tag("machine_tier_6");
-        public static final TagKey<Item> MINER_STRUCTURE_7 = tag("machine_tier_7");
-
-        public static final TagKey<Item> MINER_STRUCTURE = tag("structure");
+        public static final TagKey<Item> MINER_STRUCTURE = tag("miner_structure");
 
 
         private static TagKey<Item> tag(String name) {
-            return ItemTags.create(new ResourceLocation(InfinityNexusMiner.MOD_ID, name));
+            return ItemTags.create(ResourceLocation.fromNamespaceAndPath(InfinityNexusMiner.MOD_ID, name));
         }
         private static TagKey<Item> forgeTag(String name) {
-            return ItemTags.create(new ResourceLocation("forge", name));
+            return ItemTags.create(ResourceLocation.fromNamespaceAndPath("forge", name));
         }
     }
 

@@ -1,6 +1,5 @@
 {
 	"credit": "Made with Blockbench",
-	"render_type": "translucent",
 	"textures": {
 		"0": "minecraft:block/copper_block",
 		"1": "infinity_nexus_miner:block/machine_casing",

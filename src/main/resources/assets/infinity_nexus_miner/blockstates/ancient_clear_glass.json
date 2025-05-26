@@ -1,7 +1,7 @@
 {
       "variants": {
             "": {
-                  "model": "infinity_nexus_miner:block/ancient_clear_glass"
+                  "model": "infinity_nexus_miner:block/ancient_crystal_block"
             }
       }
 }

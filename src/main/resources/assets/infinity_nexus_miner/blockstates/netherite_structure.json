@@ -18,6 +18,8 @@
     "facing=south,lit=2":{"model": "infinity_nexus_miner:block/netherite_structure_1", "y": 90},
     "facing=west,lit=2":{"model": "infinity_nexus_miner:block/netherite_structure_1", "y": 180},
     "facing=east,lit=2":{"model": "infinity_nexus_miner:block/netherite_structure_1", "y": 270},
+    "facing=up,lit=2":{"model": "infinity_nexus_miner:block/netherite_structure_1"},
+    "facing=down,lit=2":{"model": "infinity_nexus_miner:block/netherite_structure_1"},
 
     "facing=north,lit=3":{"model": "infinity_nexus_miner:block/netherite_structure_2"},
     "facing=south,lit=3":{"model": "infinity_nexus_miner:block/netherite_structure_2", "y": 90},

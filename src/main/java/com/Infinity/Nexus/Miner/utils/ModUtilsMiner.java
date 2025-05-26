@@ -1,12 +1,10 @@
 package com.Infinity.Nexus.Miner.utils;
 
 import com.Infinity.Nexus.Core.fakePlayer.IFFakePlayer;
-import com.Infinity.Nexus.Miner.config.Config;
+import com.Infinity.Nexus.Core.utils.ModTags;
 import com.Infinity.Nexus.Miner.item.ModItemsMiner;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -63,5 +61,28 @@ public class ModUtilsMiner {
 
         });
         return dropItem.get();
+    }
+
+    public static int getTierByItem(ItemStack stack) {
+        if(stack.is(ModTags.Items.UP_9)){
+            return 9;
+        } else if(stack.is(ModTags.Items.UP_8)){
+            return 8;
+        } else if(stack.is(ModTags.Items.UP_7)){
+            return 7;
+        } else if(stack.is(ModTags.Items.UP_6)){
+            return 6;
+        } else if(stack.is(ModTags.Items.UP_5)){
+            return 5;
+        } else if(stack.is(ModTags.Items.UP_4)){
+            return 4;
+        } else if(stack.is(ModTags.Items.UP_3)){
+            return 3;
+        } else if(stack.is(ModTags.Items.UP_2)){
+            return 2;
+        } else if(stack.is(ModTags.Items.UP_1)){
+            return 1;
+        }
+        return 0;
     }
 }

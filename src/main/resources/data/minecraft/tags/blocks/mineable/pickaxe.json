@@ -26,6 +26,18 @@
     "infinity_nexus_miner:green_clear_glass",
     "infinity_nexus_miner:blue_clear_glass",
     "infinity_nexus_miner:pink_clear_glass",
-    "infinity_nexus_miner:red_clear_glass"
+    "infinity_nexus_miner:red_clear_glass",
+    "infinity_nexus_miner:christmas_clear_glass",
+
+    "infinity_nexus_miner:ancient_crystal_block",
+    "infinity_nexus_miner:white_crystal_block",
+    "infinity_nexus_miner:purple_crystal_block",
+    "infinity_nexus_miner:orange_crystal_block",
+    "infinity_nexus_miner:yellow_crystal_block",
+    "infinity_nexus_miner:green_crystal_block",
+    "infinity_nexus_miner:blue_crystal_block",
+    "infinity_nexus_miner:pink_crystal_block",
+    "infinity_nexus_miner:red_crystal_block",
+    "infinity_nexus_miner:christmas_crystal_block"
   ]
 }
