@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "minecraft:glass"
+    },
+    "B": {
+      "item": "infinity_nexus_miner:agate_crystal"
+    },
+    "C": {
+      "item": "minecraft:quartz_slab"
+    }
+  },
+  "pattern": [
+    "AAA",
+    "ABA",
+    "CCC"
+  ],
+  "result": {
+    "item": "infinity_nexus_miner:pink_light_crystal",
+    "count": 6
+  },
+  "show_notification": true
+}
