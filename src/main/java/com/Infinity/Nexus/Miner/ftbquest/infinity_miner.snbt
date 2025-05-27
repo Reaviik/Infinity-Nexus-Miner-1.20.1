@@ -1,0 +1,749 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "infinity_miner"
+	group: "39E458E1366D7D1D"
+	icon: "infinity_nexus_miner:miner"
+	id: "64E38C187BF29C37"
+	order_index: 8
+	quest_links: [ ]
+	quests: [
+		{
+			dependencies: [
+				"21C2EA5190294AB2"
+				"2764A153F79D1507"
+				"5354A39A37BD7C84"
+				"5ED65F7B015D44BE"
+			]
+			description: [
+				"This is a multi-block miner and its initial structure occupies an area of 5x5x5 and uses 32 wooden structures."
+				""
+				"A Redstone component is also required for the first level, in addition to power, of course."
+				""
+				"&9Place the miner 5 blocks above the ground and place the structures, the component and power or gravel, then click the \"A\" button in the upper right corner to assemble it."
+			]
+			id: "5A78CEF3161321A4"
+			min_required_dependencies: 2
+			subtitle: "&bInfinity Raw's"
+			tasks: [{
+				id: "1F6AC9BD746895AC"
+				item: "infinity_nexus_miner:miner"
+				type: "item"
+			}]
+			x: -5.0d
+			y: -8.5d
+		}
+		{
+			description: [
+				"&e[Optional]&f"
+				""
+				"By clicking with this tool on an inventory (Chest, Barrel, Backpack, etc.)"
+				"the inventory coordinates will be obtained and when in the miner's slot the mined ores will be sent to this inventory as soon as the items in the miner's internal inventory arrive in the shipping slot."
+			]
+			id: "5354A39A37BD7C84"
+			subtitle: "&bWifi"
+			tasks: [{
+				id: "020B1BE2339F7C83"
+				item: "infinity_nexus_core:linking_tool"
+				type: "item"
+			}]
+			x: -6.5d
+			y: -10.0d
+		}
+		{
+			description: [
+				"&e[Optional]&f"
+				""
+				"You can use any enchanted books or enchanted tools to improve your mining."
+				"Enchantments like Fortune are capped at 9 by default even if you have a higher level. Silk Touch is disabled by default in the settings."
+			]
+			id: "5ED65F7B015D44BE"
+			subtitle: "&bEnchants"
+			tasks: [{
+				id: "46AFB6A06F6403BF"
+				item: {
+					Count: 1
+					id: "minecraft:enchanted_book"
+					tag: {
+						StoredEnchantments: [{
+							id: "minecraft:fortune"
+							lvl: 8s
+						}]
+					}
+				}
+				type: "item"
+			}]
+			x: -5.0d
+			y: -10.0d
+		}
+		{
+			description: [
+				"&4[Mandatory]&f"
+				""
+				"Components function as energy distributors and the higher their level, the better the machine will work."
+				""
+				"&9It is also the component that defines which minerals will be mined, in the case of the Redstone component only common things like coal and copper can be mined."
+			]
+			id: "2764A153F79D1507"
+			subtitle: "&bComponents"
+			tasks: [{
+				id: "3D0CEA4EC7C3AD92"
+				item: {
+					Count: 1
+					id: "infinity_nexus_core:redstone_component"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			x: -6.5d
+			y: -8.5d
+		}
+		{
+			dependencies: ["5ADD4F8F04AF5970"]
+			id: "63B73B0EC04CDC5E"
+			tasks: [{
+				id: "069471E5B6E4AD7F"
+				item: {
+					Count: 1
+					id: "infinity_nexus_core:basic_component"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			x: -2.0d
+			y: -9.0d
+		}
+		{
+			dependencies: ["1B3D2B490665A91C"]
+			id: "25DC5119965638DA"
+			tasks: [{
+				id: "667A898E58446CB8"
+				item: {
+					Count: 1
+					id: "infinity_nexus_core:reinforced_component"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			x: 1.0d
+			y: -9.0d
+		}
+		{
+			dependencies: ["2D495C9F5F0C8298"]
+			id: "40805E5353B329B6"
+			tasks: [{
+				id: "09EA3586CE10EBDF"
+				item: {
+					Count: 1
+					id: "infinity_nexus_core:logic_component"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			x: 4.0d
+			y: -9.0d
+		}
+		{
+			dependencies: ["50BFC37CFD28D987"]
+			id: "57F8A83B1B4354B7"
+			tasks: [{
+				id: "05F2275DC43198BF"
+				item: {
+					Count: 1
+					id: "infinity_nexus_core:advanced_component"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			x: 7.0d
+			y: -9.0d
+		}
+		{
+			dependencies: ["2F25BA5A62A2D82D"]
+			id: "0BB6455974CFC3E7"
+			tasks: [{
+				id: "416B07C8AE273252"
+				item: {
+					Count: 1
+					id: "infinity_nexus_core:refined_component"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			x: 10.0d
+			y: -9.0d
+		}
+		{
+			dependencies: ["588904AE9324C004"]
+			id: "22744D262064EFDD"
+			tasks: [{
+				id: "57D4448655CDAFA2"
+				item: {
+					Count: 1
+					id: "infinity_nexus_core:integral_component"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			x: 13.0d
+			y: -9.0d
+		}
+		{
+			dependencies: ["377F70ED3CF7CBCE"]
+			id: "0029F70E1DE121E8"
+			tasks: [{
+				id: "70CB6BD08158785A"
+				item: {
+					Count: 1
+					id: "infinity_nexus_core:infinity_component"
+					tag: { }
+				}
+				type: "item"
+			}]
+			x: 16.0d
+			y: -9.0d
+		}
+		{
+			dependencies: ["403F3FB882E30D92"]
+			description: ["This component only has 1 single use, but can be improved to have infinite uses. To make it infinite, just have an Infinity Component in your secondary hand and the Ancestral Component in your primary hand, now just click on the ground with them and the fusion will occur, consuming the Infinity Component."]
+			id: "0A5121B36D02E688"
+			subtitle: "&bUltimate!"
+			tasks: [{
+				id: "5E2E5D18E0655B0A"
+				item: {
+					Count: 1
+					id: "infinity_nexus_core:ancestral_component"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			x: 19.0d
+			y: -9.0d
+		}
+		{
+			dependencies: ["01A8F6A728A82590"]
+			description: [
+				"&4[Mandatory]&f"
+				""
+				"The level of the structure that will be recognized by the mining company is defined by the component level. Components of higher levels cannot use lower structures or vice versa."
+			]
+			id: "21C2EA5190294AB2"
+			subtitle: "&bStructures"
+			tasks: [{
+				count: 32L
+				id: "0F467897F3FC639D"
+				item: "infinity_nexus_miner:wood_structure"
+				type: "item"
+			}]
+			x: -6.5d
+			y: -7.5d
+		}
+		{
+			dependencies: ["5ADD4F8F04AF5970"]
+			id: "59BC3B5547347293"
+			tasks: [{
+				count: 32L
+				id: "0C26EB56E6AE9C86"
+				item: "infinity_nexus_miner:stone_structure"
+				type: "item"
+			}]
+			x: -2.0d
+			y: -8.0d
+		}
+		{
+			dependencies: ["1B3D2B490665A91C"]
+			id: "392189A849E9BF02"
+			tasks: [{
+				count: 52L
+				id: "0B4F65B0FA2C861A"
+				item: "infinity_nexus_miner:copper_structure"
+				type: "item"
+			}]
+			x: 1.0d
+			y: -8.0d
+		}
+		{
+			dependencies: ["2D495C9F5F0C8298"]
+			id: "45823CC1349C3ABF"
+			tasks: [{
+				count: 52L
+				id: "7850479D19093AEE"
+				item: "infinity_nexus_miner:iron_structure"
+				type: "item"
+			}]
+			x: 4.0d
+			y: -8.0d
+		}
+		{
+			dependencies: ["50BFC37CFD28D987"]
+			id: "4A7BF6D8468BC833"
+			tasks: [{
+				count: 72L
+				id: "4231C5BBF2FDFDEE"
+				item: "infinity_nexus_miner:gold_structure"
+				type: "item"
+			}]
+			x: 7.0d
+			y: -8.0d
+		}
+		{
+			dependencies: ["588904AE9324C004"]
+			id: "09FC7A8E5B95FE31"
+			tasks: [{
+				count: 92L
+				id: "36E32CDDA00CF1C3"
+				item: "infinity_nexus_miner:diamond_structure"
+				type: "item"
+			}]
+			x: 13.0d
+			y: -8.0d
+		}
+		{
+			dependencies: ["377F70ED3CF7CBCE"]
+			id: "4A8651E25AFE291F"
+			tasks: [{
+				count: 92L
+				id: "58655BE4E8045CD0"
+				item: "infinity_nexus_miner:emerald_structure"
+				type: "item"
+			}]
+			x: 16.0d
+			y: -8.0d
+		}
+		{
+			dependencies: ["403F3FB882E30D92"]
+			id: "6742A922090E2B69"
+			tasks: [{
+				count: 92L
+				id: "31021C6746067FC9"
+				item: "infinity_nexus_miner:netherite_structure"
+				type: "item"
+			}]
+			x: 19.0d
+			y: -8.0d
+		}
+		{
+			dependencies: ["2F25BA5A62A2D82D"]
+			id: "14F2E468B5988F41"
+			tasks: [{
+				count: 72L
+				id: "097721620079FF94"
+				item: "infinity_nexus_miner:quartz_structure"
+				type: "item"
+			}]
+			x: 10.0d
+			y: -8.0d
+		}
+		{
+			dependencies: ["5A78CEF3161321A4"]
+			description: [
+				"Crystals are obtained by mining anything in the mining rig and you do not need to have an ore to do so."
+				"The drop chance of each crystal is 1% if the mining rig is at the same level as the crystal and +1% for each level that the mining rig is above the crystal level."
+			]
+			id: "5ADD4F8F04AF5970"
+			subtitle: "&bCrystals"
+			tasks: [{
+				id: "27FCBCB82020D9C4"
+				item: "infinity_nexus_miner:amber_crystal"
+				type: "item"
+			}]
+			x: -3.5d
+			y: -8.5d
+		}
+		{
+			dependencies: ["5ADD4F8F04AF5970"]
+			id: "252C3A736CA50047"
+			tasks: [{
+				id: "7AFD7AF78D4BD5AB"
+				item: "infinity_nexus_miner:yellow_light_crystal"
+				type: "item"
+			}]
+			x: -3.0d
+			y: -10.0d
+		}
+		{
+			dependencies: ["1B3D2B490665A91C"]
+			id: "36FF865E185A0348"
+			tasks: [{
+				id: "3FA265AF033306BB"
+				item: "infinity_nexus_miner:blue_light_crystal"
+				type: "item"
+			}]
+			x: 0.0d
+			y: -10.0d
+		}
+		{
+			dependencies: ["2D495C9F5F0C8298"]
+			id: "06C27BE1879B6957"
+			tasks: [{
+				id: "2932618AC2F96761"
+				item: "infinity_nexus_miner:orange_light_crystal"
+				type: "item"
+			}]
+			x: 3.0d
+			y: -10.0d
+		}
+		{
+			dependencies: ["50BFC37CFD28D987"]
+			id: "6955A9489AEA2D50"
+			tasks: [{
+				id: "23581EB3489AC119"
+				item: "infinity_nexus_miner:green_light_crystal"
+				type: "item"
+			}]
+			x: 6.0d
+			y: -10.0d
+		}
+		{
+			dependencies: ["2F25BA5A62A2D82D"]
+			id: "4C810911E86C33EF"
+			tasks: [{
+				id: "7E97D7CC579C8C66"
+				item: "infinity_nexus_miner:purple_light_crystal"
+				type: "item"
+			}]
+			x: 9.0d
+			y: -10.0d
+		}
+		{
+			dependencies: [
+				"63B73B0EC04CDC5E"
+				"59BC3B5547347293"
+			]
+			id: "1B3D2B490665A91C"
+			tasks: [{
+				id: "4CFD4D8CA05DCD5D"
+				item: "infinity_nexus_miner:marine_crystal"
+				type: "item"
+			}]
+			x: -0.5d
+			y: -8.5d
+		}
+		{
+			dependencies: [
+				"392189A849E9BF02"
+				"25DC5119965638DA"
+			]
+			id: "2D495C9F5F0C8298"
+			tasks: [{
+				id: "55AD1F627E0DE522"
+				item: "infinity_nexus_miner:citrium_crystal"
+				type: "item"
+			}]
+			x: 2.5d
+			y: -8.5d
+		}
+		{
+			dependencies: [
+				"45823CC1349C3ABF"
+				"40805E5353B329B6"
+			]
+			id: "50BFC37CFD28D987"
+			tasks: [{
+				id: "5B474C6CA08403FB"
+				item: "infinity_nexus_miner:rubium_crystal"
+				type: "item"
+			}]
+			x: 5.5d
+			y: -8.5d
+		}
+		{
+			dependencies: [
+				"57F8A83B1B4354B7"
+				"4A7BF6D8468BC833"
+			]
+			id: "2F25BA5A62A2D82D"
+			tasks: [{
+				id: "4B2A4E59BAE1ACB5"
+				item: "infinity_nexus_miner:demetrium_crystal"
+				type: "item"
+			}]
+			x: 8.5d
+			y: -8.5d
+		}
+		{
+			dependencies: [
+				"14F2E468B5988F41"
+				"0BB6455974CFC3E7"
+			]
+			id: "588904AE9324C004"
+			tasks: [{
+				id: "24CDB9943CEE23E1"
+				item: "infinity_nexus_miner:agate_crystal"
+				type: "item"
+			}]
+			x: 11.5d
+			y: -8.5d
+		}
+		{
+			dependencies: [
+				"09FC7A8E5B95FE31"
+				"22744D262064EFDD"
+			]
+			id: "377F70ED3CF7CBCE"
+			tasks: [{
+				id: "1050CC4A4A8EE9DE"
+				item: "infinity_nexus_miner:darium_crystal"
+				type: "item"
+			}]
+			x: 14.5d
+			y: -8.5d
+		}
+		{
+			dependencies: [
+				"4A8651E25AFE291F"
+				"0029F70E1DE121E8"
+			]
+			id: "403F3FB882E30D92"
+			tasks: [{
+				id: "7425D9FD7F24B017"
+				item: "infinity_nexus_miner:termurium_crystal"
+				type: "item"
+			}]
+			x: 17.5d
+			y: -8.5d
+		}
+		{
+			dependencies: ["588904AE9324C004"]
+			id: "44A21FACCCDD32A4"
+			tasks: [{
+				id: "77DE01E95663E4D1"
+				item: "infinity_nexus_miner:pink_light_crystal"
+				type: "item"
+			}]
+			x: 12.0d
+			y: -10.0d
+		}
+		{
+			dependencies: ["403F3FB882E30D92"]
+			id: "72F02FA607A50600"
+			tasks: [{
+				id: "2430C95BB7A49510"
+				item: "infinity_nexus_miner:ancient_light_crystal"
+				type: "item"
+			}]
+			x: 18.0d
+			y: -10.0d
+		}
+		{
+			dependencies: ["377F70ED3CF7CBCE"]
+			id: "52517CFA2BA62B62"
+			tasks: [{
+				id: "4114C84EBD31B022"
+				item: "infinity_nexus_miner:red_light_crystal"
+				type: "item"
+			}]
+			x: 15.0d
+			y: -10.0d
+		}
+		{
+			dependencies: ["72F02FA607A50600"]
+			id: "73C6E8D79AA1FF5C"
+			tasks: [{
+				id: "6F13C2ED1281148D"
+				item: "infinity_nexus_miner:christmas_light_crystal"
+				type: "item"
+			}]
+			x: 20.5d
+			y: -10.0d
+		}
+		{
+			dependencies: ["5ADD4F8F04AF5970"]
+			id: "559B42B48D345753"
+			tasks: [{
+				id: "217B0556737008EF"
+				item: "infinity_nexus_miner:yellow_clear_glass"
+				type: "item"
+			}]
+			x: -4.0d
+			y: -11.5d
+		}
+		{
+			dependencies: ["1B3D2B490665A91C"]
+			id: "627E8FB28B1F1678"
+			tasks: [{
+				id: "68F195951105F522"
+				item: "infinity_nexus_miner:blue_clear_glass"
+				type: "item"
+			}]
+			x: -1.0d
+			y: -11.5d
+		}
+		{
+			dependencies: ["2D495C9F5F0C8298"]
+			id: "794280549D5734F1"
+			tasks: [{
+				id: "43783CEBE7FD7DA5"
+				item: "infinity_nexus_miner:orange_clear_glass"
+				type: "item"
+			}]
+			x: 2.0d
+			y: -11.5d
+		}
+		{
+			dependencies: ["50BFC37CFD28D987"]
+			id: "3BB59FB864500491"
+			tasks: [{
+				id: "4A05691B7582B1F9"
+				item: "infinity_nexus_miner:green_clear_glass"
+				type: "item"
+			}]
+			x: 5.0d
+			y: -11.5d
+		}
+		{
+			dependencies: ["2F25BA5A62A2D82D"]
+			id: "1446574B4FD4E57C"
+			tasks: [{
+				id: "2AC35A24AFCAD685"
+				item: "infinity_nexus_miner:purple_clear_glass"
+				type: "item"
+			}]
+			x: 8.0d
+			y: -11.5d
+		}
+		{
+			dependencies: ["588904AE9324C004"]
+			id: "62629104D0960EBF"
+			tasks: [{
+				id: "0DDF5035EAB33EBC"
+				item: "infinity_nexus_miner:pink_clear_glass"
+				type: "item"
+			}]
+			x: 11.0d
+			y: -11.5d
+		}
+		{
+			dependencies: ["377F70ED3CF7CBCE"]
+			id: "59A08E125237B07F"
+			tasks: [{
+				id: "07E8D5CAEE76B0CF"
+				item: "infinity_nexus_miner:red_clear_glass"
+				type: "item"
+			}]
+			x: 14.0d
+			y: -11.5d
+		}
+		{
+			dependencies: ["403F3FB882E30D92"]
+			id: "29B40DA196028C9B"
+			tasks: [{
+				id: "7DE9DC97F550269A"
+				item: "infinity_nexus_miner:ancient_clear_glass"
+				type: "item"
+			}]
+			x: 17.0d
+			y: -11.5d
+		}
+		{
+			dependencies: ["29B40DA196028C9B"]
+			id: "37BD64B667729985"
+			tasks: [{
+				id: "0CF0DF4309FCEF89"
+				item: "infinity_nexus_miner:christmas_clear_glass"
+				type: "item"
+			}]
+			x: 19.5d
+			y: -11.5d
+		}
+		{
+			dependencies: ["01A8F6A728A82590"]
+			description: [
+				""
+				"Light crystals are small and excellent for decoration, but they have an extra function as buttons and only emit a redstone signal for a single tick."
+			]
+			id: "58B3539B1E7C449F"
+			subtitle: "&bLights"
+			tasks: [{
+				id: "43004CACCFB9D9E4"
+				item: "infinity_nexus_miner:white_light_crystal"
+				type: "item"
+			}]
+			x: -6.5d
+			y: -6.0d
+		}
+		{
+			dependencies: ["01A8F6A728A82590"]
+			description: [
+				""
+				"Crystal glass is translucent and emits a low amount of light, providing a beautiful view in dark environments."
+			]
+			id: "5EB1B359CA535CA1"
+			subtitle: "&bGlasses"
+			tasks: [{
+				id: "50C97CBB1F8116BA"
+				item: "infinity_nexus_miner:white_clear_glass"
+				type: "item"
+			}]
+			x: -8.5d
+			y: -6.0d
+		}
+		{
+			id: "01A8F6A728A82590"
+			tasks: [{
+				id: "292937F60DFCA29B"
+				item: "minecraft:amethyst_shard"
+				type: "item"
+			}]
+			x: -8.5d
+			y: -7.5d
+		}
+		{
+			id: "6D59A74E57788519"
+			tasks: [{
+				id: "672A5A8430918883"
+				item: "infinity_nexus_core:speed_upgrade"
+				type: "item"
+			}]
+			x: -5.0d
+			y: -6.0d
+		}
+		{
+			id: "72D53BFA9E81E1E1"
+			tasks: [{
+				id: "2BCF1B9625C4F4AF"
+				item: "infinity_nexus_core:strength_upgrade"
+				type: "item"
+			}]
+			x: -4.0d
+			y: -6.0d
+		}
+		{
+			id: "7DD2F8896F8656F0"
+			tasks: [{
+				id: "6385C8095CF1D1DF"
+				item: "infinity_nexus_core:muffler_upgrade"
+				type: "item"
+			}]
+			x: -5.0d
+			y: -5.0d
+		}
+		{
+			id: "4750499C305B1148"
+			tasks: [{
+				id: "0241DB8AF67A2938"
+				item: "infinity_nexus_core:pusher_upgrade"
+				type: "item"
+			}]
+			x: -4.0d
+			y: -5.0d
+		}
+	]
+	title: "&oInfinity Miner"
+}
