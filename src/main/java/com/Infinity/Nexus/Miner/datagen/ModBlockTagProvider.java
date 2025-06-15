@@ -5,6 +5,7 @@ import com.Infinity.Nexus.Miner.block.ModBlocksMiner;
 import com.Infinity.Nexus.Miner.utils.ModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.tags.BlockTags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
@@ -30,6 +31,32 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocksMiner.EMERALD_STRUCTURE.get())
                 .add(ModBlocksMiner.NETHERITE_STRUCTURE.get());
 
-    }
+        this.tag(BlockTags.MINEABLE_WITH_AXE)
+                .add(ModBlocksMiner.WOOD_STRUCTURE.get());
 
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+                .add(ModBlocksMiner.MINER.get())
+                .add(ModBlocksMiner.STONE_STRUCTURE.get())
+                .add(ModBlocksMiner.COPPER_STRUCTURE.get())
+                .add(ModBlocksMiner.IRON_STRUCTURE.get())
+                .add(ModBlocksMiner.GOLD_STRUCTURE.get())
+                .add(ModBlocksMiner.QUARTZ_STRUCTURE.get())
+                .add(ModBlocksMiner.DIAMOND_STRUCTURE.get())
+                .add(ModBlocksMiner.EMERALD_STRUCTURE.get())
+                .add(ModBlocksMiner.NETHERITE_STRUCTURE.get());
+
+        this.tag(BlockTags.NEEDS_STONE_TOOL)
+                .add(ModBlocksMiner.WOOD_STRUCTURE.get());
+
+        this.tag(BlockTags.NEEDS_IRON_TOOL)
+                .add(ModBlocksMiner.MINER.get())
+                .add(ModBlocksMiner.STONE_STRUCTURE.get())
+                .add(ModBlocksMiner.COPPER_STRUCTURE.get())
+                .add(ModBlocksMiner.IRON_STRUCTURE.get())
+                .add(ModBlocksMiner.GOLD_STRUCTURE.get())
+                .add(ModBlocksMiner.QUARTZ_STRUCTURE.get())
+                .add(ModBlocksMiner.DIAMOND_STRUCTURE.get())
+                .add(ModBlocksMiner.EMERALD_STRUCTURE.get())
+                .add(ModBlocksMiner.NETHERITE_STRUCTURE.get());
+    }
 }

@@ -63,7 +63,7 @@ public record MinerRecipe(Integer energy, Ingredient tier, Boolean fortune, Ingr
     }
 
     public ItemStack getResultItem() {
-        return result;
+        return result.copy();
     }
 
     public Boolean getFortune() {

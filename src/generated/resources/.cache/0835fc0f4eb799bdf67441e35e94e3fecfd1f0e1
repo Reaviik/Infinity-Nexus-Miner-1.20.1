@@ -1,2 +1,6 @@
-// 1.21.1	2025-04-26T16:52:42.848836	Tags for minecraft:block mod id infinity_nexus_miner
+// 1.21.1	2025-05-28T12:18:38.9900004	Tags for minecraft:block mod id infinity_nexus_miner
 905311b71698f1da2187c8ab23c8e2b38b204b01 data/infinity_nexus_miner/tags/block/miner_structure.json
+bd4ea2b9d691c794976321bd35f0c4a16508babd data/minecraft/tags/block/mineable/axe.json
+558254a3756e60ce0f7050dde6795df918b48fb9 data/minecraft/tags/block/mineable/pickaxe.json
+558254a3756e60ce0f7050dde6795df918b48fb9 data/minecraft/tags/block/needs_iron_tool.json
+bd4ea2b9d691c794976321bd35f0c4a16508babd data/minecraft/tags/block/needs_stone_tool.json

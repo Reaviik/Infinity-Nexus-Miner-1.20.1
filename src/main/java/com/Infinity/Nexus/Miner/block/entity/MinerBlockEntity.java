@@ -17,10 +17,7 @@ import com.Infinity.Nexus.Miner.screen.miner.MinerMenu;
 import com.Infinity.Nexus.Miner.utils.MinerTierStructure;
 import com.Infinity.Nexus.Miner.utils.ModUtilsMiner;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -90,7 +87,7 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
                 case 15 -> stack.is(ModItems.LINKING_TOOL.get().asItem());
                 case 16 -> stack.getBurnTime(null) > 0;
                 case 17 -> ConfigUtils.isStructure(stack);
-                case 18 -> false;
+                case 18 -> true;
                 default -> super.isItemValid(slot, stack);
             };
         }
@@ -400,18 +397,14 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
             }
             Player player = this.level.getPlayerByUUID(UUID.fromString(this.owner));
             if (player != null) {
-                // Obtendo as coordenadas do bloco
                 int x = pPos.getX();
                 int y = pPos.getY();
                 int z = pPos.getZ();
 
-                // Obtendo a dimensão do bloco
                 ResourceKey<Level> blockDimension = this.level.dimension();
 
-                // Criando a string da dimensão
-                String dimensionName = blockDimension.location().toString(); // Exemplo: "minecraft:overworld"
+                String dimensionName = blockDimension.location().toString();
 
-                // Criando a mensagem com um clique executável
                 MutableComponent message = Component.translatable("chat.infinity_nexus_miner.miner_is_full")
                         .append(" [TP]")
                         .withStyle(style -> style
@@ -421,7 +414,7 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
 
                         );
                 player.displayClientMessage(message, false);
-                delay = (20 * 60) * 10; // Resetando o delay
+                delay = (20 * 60) * 10;
             }
         } else {
             delay--;
@@ -477,7 +470,6 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     private ItemStack getPickaxe() {
-        ItemStack enchantedItem = itemHandler.getStackInSlot(FORTUNE_SLOT);
         ItemStack pickaxeInSlot = itemHandler.getStackInSlot(FORTUNE_SLOT);
         ItemStack pickaxe = new ItemStack(
                 pickaxeInSlot.has(DataComponents.TOOL) ?
@@ -487,7 +479,7 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
 
         ItemEnchantments enchantments = pickaxeInSlot.get(DataComponents.STORED_ENCHANTMENTS);
         if (enchantments == null) {
-            enchantments = enchantedItem.get(DataComponents.ENCHANTMENTS);
+            enchantments = pickaxeInSlot.get(DataComponents.ENCHANTMENTS);
         }
 
         if (enchantments != null) {
@@ -571,9 +563,12 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
                     if (blockPos.equals(novoBlockPos)) {
                         BlockState blockState = level.getBlockState(blockPos);
                         ItemStack blockStack = new ItemStack(blockState.getBlock().asItem());
-                        itemHandler.setStackInSlot(RECIPE_SLOT, blockStack);
+                        ItemStackHandlerUtils.setStackInSlot(RECIPE_SLOT, blockStack, itemHandler);
                         recipe = getCurrentRecipe();
                         if (!recipe.isEmpty()) {
+                            if (!recipe.get().value().tier().test(itemHandler.getStackInSlot(COMPONENT_SLOT))) {
+                                return ItemStack.EMPTY;
+                            }
                             if (blockState.isAir() || isOre(blockStack)) {
                                 ItemStack drop = ModUtilsMiner.getDrop(blockStack, level, blockPos, getPickaxe());
                                 drops.add(Objects.requireNonNullElse(drop, ItemStack.EMPTY));
@@ -585,14 +580,16 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         }
         try {
             if (drops.isEmpty()) {
-                ItemStack recipeItem = recipe.get().value().getResultItem(null);
+                ItemStack recipeItem = recipe.get().value().getResultItem(null).copy();
                 drops.add(recipeItem);
             }
+
             if(!recipe.get().value().getFortune()){
-                ItemStack recipeItem = recipe.get().value().getResultItem(null);
+                ItemStack recipeItem = recipe.get().value().getResultItem(null).copy();
                 drops.clear();
                 drops.add(recipeItem);
             }
+
         }catch (Exception e){
             drops.add(ItemStack.EMPTY);
         }
@@ -632,7 +629,7 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
                     BlockEntity blockEntity = this.level.getBlockEntity(new BlockPos(xl, yl, zl));
                     if (blockEntity.getBlockPos().equals(this.getBlockPos())) {
                         level.addFreshEntity(new ItemEntity(level, xl, yl + 1, zl, itemHandler.getStackInSlot(LINK_SLOT).copy()));
-                        itemHandler.extractItem(LINK_SLOT, 1, false);
+                        ItemStackHandlerUtils.extractItem(LINK_SLOT, 1, false, itemHandler);
                         return;
                     }
                     if(!itemHandler.getStackInSlot(OUTPUT_SLOT[7]).isEmpty()) {
@@ -649,7 +646,7 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
                                 for (int outputSlot : OUTPUT_SLOT) {
                                     if (!itemHandler.getStackInSlot(outputSlot).isEmpty() && object.isItemValid(slot, itemStack.copy()) && ModUtils.canPlaceItemInContainer(itemHandler.getStackInSlot(outputSlot).copy(), slot, object)) {
                                         object.insertItem(slot, itemHandler.getStackInSlot(outputSlot).copy(), false);
-                                        itemHandler.extractItem(outputSlot, itemHandler.getStackInSlot(outputSlot).getCount(), false);
+                                        ItemStackHandlerUtils.extractItem(outputSlot, itemHandler.getStackInSlot(outputSlot).getCount(), false, itemHandler);
                                         success.set(true);
                                         break;
                                     }
@@ -676,7 +673,7 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
     private void insertItemOnSelfInventory(ItemStack itemStack) {
         for (int slot : OUTPUT_SLOT) {
             if (ModUtils.canPlaceItemInContainer(itemStack, slot, this.itemHandler)) {
-                this.itemHandler.insertItem(slot, itemStack, false);
+                ItemStackHandlerUtils.insertItem(slot, itemStack, false, this.itemHandler);
                 break;
             }
         }

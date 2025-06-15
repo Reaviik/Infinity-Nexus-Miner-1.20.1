@@ -1,6 +1,26 @@
+## <span style="color:#2DC26B;">` V: 5.1.1`</span>
+### <span style="color:#F1C40F;"> **Fix**:</span>
+- Structures systems
+- Recipes
+### <span style="color:#E67E23;"> **Change**:</span>
+
+---
+
+## <span style="color:#2DC26B;">` V: 5.1.0`</span>
+### <span style="color:#F1C40F;"> **Fix**:</span>
+- Blocks disappear on break
+
+---
+
+## <span style="color:#2DC26B;">` V: 5.0.9`</span>
+### <span style="color:#F1C40F;"> **Fix**:</span>
+- Custom recipes output wrong amounts
+
+---
+
 ## <span style="color:#2DC26B;">` V: 5.0.8`</span>
 ### <span style="color:#F1C40F;"> **Fix**:</span>
-- Fix Crash on save miner container data
+- Crash on save miner container data
 
 ---
 
