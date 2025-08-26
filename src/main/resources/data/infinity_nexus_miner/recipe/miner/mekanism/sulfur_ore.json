@@ -2,21 +2,21 @@
   "type": "infinity_nexus_miner:mining",
   "energy": 100,
   "level": {
-    "tag": "infinity_nexus_core:up_5"
+    "tag": "infinity_nexus_core:up_4"
   },
   "fortune": true,
   "ingredient": [
     {
-      "item": "malum:brilliant_stone"
+      "tag": "c:ores/sulfur"
     }
   ],
   "output": {
-    "id": "malum:raw_brilliance"
+    "id": "mekanism:dust_sulfur"
   },
   "neoforge:conditions": [
     {
       "type": "neoforge:mod_loaded",
-      "modid": "malum"
+      "modid": "mekanism"
     }
   ]
 }

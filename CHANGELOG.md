@@ -1,3 +1,28 @@
+## <span style="color:#2DC26B;">` V: 5.1.4`</span>
+### <span style="color:#F1C40F;"> **Fix**:</span>
+- Server Freeze on load chunks
+
+---
+
+## <span style="color:#2DC26B;">` V: 5.1.3`</span>
+### <span style="color:#F1C40F;"> **Fix**:</span>
+- Some recipes
+### <span style="color:#E67E23;"> **Change**:</span>
+- Update Core version
+- Update Forge version
+- Add Xycraft Recipes
+
+---
+## <span style="color:#2DC26B;">` V: 5.1.2`</span>
+### <span style="color:#F1C40F;"> **Fix**:</span>
+- Input slots
+- Fortune not working
+- Malum Recipes
+### <span style="color:#E67E23;"> **Change**:</span>
+- Update Core version
+
+---
+
 ## <span style="color:#2DC26B;">` V: 5.1.1`</span>
 ### <span style="color:#F1C40F;"> **Fix**:</span>
 - Structures systems

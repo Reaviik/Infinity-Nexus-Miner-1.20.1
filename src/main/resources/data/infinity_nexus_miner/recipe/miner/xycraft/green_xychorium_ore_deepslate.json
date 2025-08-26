@@ -2,21 +2,21 @@
   "type": "infinity_nexus_miner:mining",
   "energy": 100,
   "level": {
-    "tag": "infinity_nexus_core:up_1"
+    "tag": "infinity_nexus_core:up_4"
   },
   "fortune": true,
   "ingredient": [
     {
-      "tag": "c:ores/xpetrified_ore"
+      "item": "xycraft_world:xychorium_ore_deepslate_green"
     }
   ],
   "output": {
-    "id": "forbidden_arcanus:xpetrified_orb"
+    "id": "xycraft_world:xychorium_gem_green"
   },
   "neoforge:conditions": [
     {
       "type": "neoforge:mod_loaded",
-      "modid": "forbidden_arcanus"
+      "modid": "xycraft_world"
     }
   ]
 }

@@ -9,7 +9,8 @@ import net.minecraft.network.chat.Component;
 
 public class Reload {
     public Reload(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(Commands.literal("InfinityNexusMiner").then(Commands.literal("reload")
+        dispatcher.register(Commands.literal("InfinityNexusMiner")
+                .then(Commands.literal("reload")
                 .executes(this::execute)));
     }
 

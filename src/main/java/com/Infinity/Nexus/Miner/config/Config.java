@@ -11,7 +11,7 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 @EventBusSubscriber(modid = InfinityNexusMiner.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class Config
 {
-    //Instancia a Configuração
+    //Instancia a Configuraçãodda
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
 
     //Define a Constante de Configuração
@@ -21,7 +21,7 @@ public class Config
             .comment("Define ao minerar o componente de perderá durabilidade (se o componente não for um item duravel ele será consumido)")
             .define("miner_mining_cost_component_durability", false);
 
-    private static final ModConfigSpec.IntValue MAX_FORTUNE_LEVEL = BUILDER.comment("Define o nivel maximo de fortuna da Mineradora").defineInRange("max_fortune_level", 9, 1, 9);
+    private static final ModConfigSpec.IntValue MAX_FORTUNE_LEVEL = BUILDER.comment("Define o nivel maximo de fortuna da Mineradora").defineInRange("max_fortune_level", 9, 1, 255);
     private static final ModConfigSpec.IntValue MINER_ENERGY = BUILDER.comment("Define a quantidade de energia que a Mineradora vai armazenar").defineInRange("miner_energy_capacity", 150000, 1, Integer.MAX_VALUE);
     private static final ModConfigSpec.IntValue MINER_ENERGY_TRANSFER = BUILDER.comment("Define a quantidade de energia que a Mineradora vai transferir").defineInRange("miner_energy_transfer", 100000, 1, Integer.MAX_VALUE);
     private static final ModConfigSpec.IntValue MINER_FUEL_MULTIPLIER = BUILDER.comment("Define o valor que a Mineradora vai multiplicar a geração de combustível. Ex: Carvão == 1600 * miner_fuel_multiplier = Energia que um caravão vai gerar").defineInRange("miner_fuel_multiplier", 5, 1, Integer.MAX_VALUE);

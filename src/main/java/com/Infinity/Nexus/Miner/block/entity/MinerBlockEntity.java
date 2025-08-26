@@ -80,7 +80,7 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         @Override
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
             return switch (slot) {
-                case 0, 1, 2, 3, 4, 5, 6, 7, 8 -> !ModUtils.isComponent(stack) || !ModUtils.isUpgrade(stack);
+                case 0, 1, 2, 3, 4, 5, 6, 7, 8 -> !ModUtils.isComponent(stack) && !ModUtils.isUpgrade(stack);
                 case 9, 10, 11, 12 -> ModUtils.isUpgrade(stack);
                 case 13 -> ModUtils.isComponent(stack);
                 case 14 -> stack.getItem() == Items.ENCHANTED_BOOK || stack.isEnchanted();
@@ -94,10 +94,18 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
 
         @Override
         public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate, boolean fromAutomation) {
-            if(slot < 8){
+            if (slot <= 8) {
                 return super.extractItem(slot, amount, simulate, false);
             }
             return super.extractItem(slot, amount, simulate, fromAutomation);
+        }
+
+        @Override
+        public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+            if (slot <= 8 || slot == RECIPE_SLOT) {
+                return stack;
+            }
+            return super.insertItem(slot, stack, simulate);
         }
     };
     private static final int[] OUTPUT_SLOT = {0, 1, 2, 3, 4, 5, 6, 7, 8};
@@ -256,6 +264,7 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
 
     @Override
     protected void saveAdditional(CompoundTag pTag, HolderLookup.Provider registries) {
+        try {
         pTag.put("inventory", itemHandler.serializeNBT(registries));
         pTag.putInt("miner.progress", progress);
         pTag.putInt("miner.energy", ENERGY_STORAGE.getEnergyStored());
@@ -277,6 +286,10 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
         pTag.putString("owner", owner == null ? "" : owner);
 
         super.saveAdditional(pTag, registries);
+    } catch (Exception e) {
+        System.out.println("Failed to save MinerBlockEntity data at " + this.worldPosition);
+        e.printStackTrace();
+    }
     }
 
     @Override
@@ -487,6 +500,9 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
                 Holder<Enchantment> enchantment = entry.getKey();
                 int level = entry.getIntValue();
 
+                // Clamp the level to valid ranges
+                level = Math.max(1, Math.min(level, Config.max_fortune_level));
+
                 if (enchantment.getKey() == Enchantments.SILK_TOUCH && !Config.miner_can_be_use_silk_touch) {
                     continue;
                 }
@@ -588,6 +604,9 @@ public class MinerBlockEntity extends BlockEntity implements MenuProvider {
                 ItemStack recipeItem = recipe.get().value().getResultItem(null).copy();
                 drops.clear();
                 drops.add(recipeItem);
+            }
+            if(!drops.get(0).is(recipe.get().value().getResultItem().getItem())){
+                drops.set(0, recipe.get().value().getResultItem());
             }
 
         }catch (Exception e){

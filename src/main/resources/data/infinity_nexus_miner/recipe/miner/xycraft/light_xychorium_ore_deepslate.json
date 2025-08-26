@@ -7,11 +7,11 @@
   "fortune": true,
   "ingredient": [
     {
-      "tag": "c:ores/xychorium"
+      "item": "xycraft_world:xychorium_ore_deepslate_light"
     }
   ],
   "output": {
-    "id": "xycraft_world:xychorium_gem_blue"
+    "id": "xycraft_world:xychorium_gem_light"
   },
   "neoforge:conditions": [
     {
