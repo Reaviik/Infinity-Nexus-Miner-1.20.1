@@ -9,7 +9,7 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 
 
-@EventBusSubscriber(modid = InfinityNexusMiner.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = InfinityNexusMiner.MOD_ID)
 public class ModBusEvents {
 
     @SubscribeEvent
